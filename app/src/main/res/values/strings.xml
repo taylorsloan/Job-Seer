@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Job Seer</string>
+    <string name="title_activity_job_detail">JobDetailActivity</string>
+</resources>

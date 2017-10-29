@@ -1,0 +1,75 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:7557905300915581383",
+      "lastPropertyId": "12:3387184302500618839",
+      "name": "Job",
+      "properties": [
+        {
+          "id": "1:7150007907542348542",
+          "name": "dbId"
+        },
+        {
+          "id": "2:5014627659971965245",
+          "indexId": "1:9184150094541751916",
+          "name": "id"
+        },
+        {
+          "id": "3:1029533109567015001",
+          "name": "created_at"
+        },
+        {
+          "id": "4:8631372666062027260",
+          "name": "title"
+        },
+        {
+          "id": "5:1436138379496210987",
+          "name": "location"
+        },
+        {
+          "id": "6:7985318920403710258",
+          "name": "type"
+        },
+        {
+          "id": "7:2482151874452317159",
+          "name": "description"
+        },
+        {
+          "id": "8:6964732416240572977",
+          "name": "how_to_apply"
+        },
+        {
+          "id": "9:9070405387609780029",
+          "name": "company"
+        },
+        {
+          "id": "10:6996980714338701913",
+          "name": "company_url"
+        },
+        {
+          "id": "11:1303524693998152829",
+          "name": "company_logo"
+        },
+        {
+          "id": "12:3387184302500618839",
+          "name": "url"
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "1:7557905300915581383",
+  "lastIndexId": "1:9184150094541751916",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 4,
+  "modelVersionParserMinimum": 4,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}
