@@ -5,12 +5,12 @@ import android.os.Bundle
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.widget.LinearLayout
 import com.taylorsloan.jobseer.R
 import com.taylorsloan.jobseer.data.model.Job
 import io.nlopez.smartadapters.SmartAdapter
 import io.nlopez.smartadapters.adapters.RecyclerMultiAdapter
 import kotlinx.android.synthetic.main.activity_job_list.*
+import timber.log.Timber
 
 class JobListActivity : AppCompatActivity(), JobListContract.View{
 
@@ -31,6 +31,7 @@ class JobListActivity : AppCompatActivity(), JobListContract.View{
         items.clear()
         items.addAll(jobs)
         result.dispatchUpdatesTo(adapter)
+        Timber.d("Job Count: %s", items.size)
     }
 
     private fun setupViews(){
@@ -42,13 +43,12 @@ class JobListActivity : AppCompatActivity(), JobListContract.View{
                 .into(recyclerView)
         val scrollListener = object : EndlessRecyclerViewScrollListener(recyclerView.layoutManager){
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView) {
+                Timber.d("Load Page: %s", page)
                 presenter.loadMore(page)
             }
         }
         recyclerView.addOnScrollListener(scrollListener)
     }
-
-
 
     private fun setupInteractions(){
 

@@ -20,6 +20,10 @@ class GetJobs(var page: Int = 0) : BaseUseCase<Observable<List<Job>>> {
     }
 
     override fun execute(): Observable<List<Job>> {
-        return jobRepo.jobs(page = page)
+        return jobRepo.getJobs()
+    }
+
+    fun getMore(){
+        jobRepo.getMoreJobs(page = page)
     }
 }

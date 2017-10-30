@@ -7,12 +7,18 @@ import io.reactivex.Observable
  * Created by taylo on 10/29/2017.
  */
 interface JobRepository {
-    fun jobs(description: String? = null,
+    fun getJobs(description: String? = null,
+                location: String? = null,
+                lat: Double? = null,
+                long: Double? = null,
+                fullTime: Boolean? = null) : Observable<List<Job>>
+
+    fun getMoreJobs(description: String? = null,
              location: String? = null,
              lat: Double? = null,
              long: Double? = null,
              fullTime: Boolean? = null,
-             page: Int = 0) : Observable<List<Job>>
+             page: Int = 0)
 
     fun job(id: String) : Observable<Job>
 }

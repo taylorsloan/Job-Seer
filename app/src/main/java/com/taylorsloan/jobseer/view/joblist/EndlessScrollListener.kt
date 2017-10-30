@@ -52,15 +52,27 @@ abstract class EndlessRecyclerViewScrollListener : RecyclerView.OnScrollListener
         var lastVisibleItemPosition = 0
         val totalItemCount = layoutManager.itemCount
 
-        if (layoutManager is StaggeredGridLayoutManager) {
-            val lastVisibleItemPositions = (layoutManager as StaggeredGridLayoutManager).findLastVisibleItemPositions(null)
-            // get maximum element within the list
-            lastVisibleItemPosition = getLastVisibleItem(lastVisibleItemPositions)
-        } else if (layoutManager is GridLayoutManager) {
-            lastVisibleItemPosition = (layoutManager as GridLayoutManager).findLastVisibleItemPosition()
-        } else if (layoutManager is LinearLayoutManager) {
-            lastVisibleItemPosition = (layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+        when (layoutManager) {
+            is StaggeredGridLayoutManager -> {
+                val lastVisibleItemPositions = (layoutManager as StaggeredGridLayoutManager)
+                        .findLastVisibleItemPositions(null)
+                // get maximum element within the list
+                lastVisibleItemPosition = getLastVisibleItem(lastVisibleItemPositions)
+            }
+            is GridLayoutManager -> lastVisibleItemPosition = (layoutManager as GridLayoutManager).findLastVisibleItemPosition()
+            is LinearLayoutManager -> lastVisibleItemPosition = (layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
         }
+
+        // If the total item count is zero and the previous isn't, assume the
+        // list is invalidated and should be reset back to initial state
+        // If it’s still loading, we check to see if the dataset count has
+        // changed, if so we conclude it has finished loading and update the current page
+        // number and total item count.
+
+        // If it isn’t currently loading, we check to see if we have breached
+        // the visibleThreshold and need to reload more data.
+        // If we do need to reload some more data, we execute onLoadMore to fetch the data.
+        // threshold should reflect how many total columns there are too
 
         // If the total item count is zero and the previous isn't, assume the
         // list is invalidated and should be reset back to initial state
@@ -84,7 +96,7 @@ abstract class EndlessRecyclerViewScrollListener : RecyclerView.OnScrollListener
         // If we do need to reload some more data, we execute onLoadMore to fetch the data.
         // threshold should reflect how many total columns there are too
         if (!loading && lastVisibleItemPosition + visibleThreshold > totalItemCount) {
-            currentPage++
+            currentPage = totalItemCount / 50
             onLoadMore((currentPage), totalItemCount, view!!)
             loading = true
         }
