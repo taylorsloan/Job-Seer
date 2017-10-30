@@ -1,8 +1,6 @@
 package com.taylorsloan.jobseer.data.service
 
-import com.taylorsloan.jobseer.dagger.component.DaggerTestNetComponent
-import com.taylorsloan.jobseer.dagger.module.NetModule
-import com.taylorsloan.jobseer.data.DataModule
+import com.taylorsloan.jobseer.data.TestDataModuleImpl
 import org.junit.Test
 import javax.inject.Inject
 
@@ -11,15 +9,11 @@ import javax.inject.Inject
  */
 class GitHubJobsServiceTest {
 
-    val netComponent = DaggerTestNetComponent.builder()
-            .netModule(NetModule(DataModule.GITHUB_JOBS_URL))
-            .build()
-
     @Inject
     lateinit var githubService : GitHubJobsService
 
     init {
-        netComponent.inject(this)
+        TestDataModuleImpl.netComponent().inject(this)
     }
 
     @Test

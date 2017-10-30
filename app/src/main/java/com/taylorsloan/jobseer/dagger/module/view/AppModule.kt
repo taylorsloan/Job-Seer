@@ -1,4 +1,4 @@
-package com.taylorsloan.jobseer.dagger.module
+package com.taylorsloan.jobseer.dagger.module.view
 
 import android.app.Application
 import dagger.Module

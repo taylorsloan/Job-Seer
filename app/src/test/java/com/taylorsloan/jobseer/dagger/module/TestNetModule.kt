@@ -14,9 +14,9 @@ import retrofit2.converter.gson.GsonConverterFactory
  * Created by taylorsloan on 10/28/17.
  */
 @Module
-class NetModule(baseUrl : String) {
+class TestNetModule(baseUrl : String) {
 
-    private val retrofit = Retrofit.Builder()
+    val retrofit = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
             .baseUrl(baseUrl)
@@ -25,7 +25,7 @@ class NetModule(baseUrl : String) {
 
     @Provides
     @DataScope
-    fun provideGitHubJobService() : GitHubJobsService{
+    fun provideGitHubJobService() : GitHubJobsService {
         return retrofit.create(GitHubJobsService::class.java)
     }
 }

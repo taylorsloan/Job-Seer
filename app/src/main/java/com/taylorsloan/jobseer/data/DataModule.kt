@@ -1,16 +1,15 @@
 package com.taylorsloan.jobseer.data
 
-import com.taylorsloan.jobseer.dagger.component.DaggerNetComponent
-import com.taylorsloan.jobseer.dagger.module.NetModule
+import com.taylorsloan.jobseer.dagger.component.DataComponent
+import com.taylorsloan.jobseer.dagger.component.NetComponent
+import com.taylorsloan.jobseer.dagger.component.StorageComponent
 
 /**
- * Created by taylorsloan on 10/28/17.
+ * Created by taylo on 10/29/2017.
  */
-object DataModule {
+interface DataModule {
 
-    const val GITHUB_JOBS_URL  = "https://jobs.github.com"
-
-    val netComponent = DaggerNetComponent.builder()
-            .netModule(NetModule(GITHUB_JOBS_URL))
-            .build()
+    fun netComponent() : NetComponent
+    fun storageComponent() : StorageComponent
+    fun dataComponent() : DataComponent
 }

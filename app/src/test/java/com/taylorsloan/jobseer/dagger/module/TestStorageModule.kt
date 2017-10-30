@@ -1,21 +1,23 @@
 package com.taylorsloan.jobseer.dagger.module
 
-import android.app.Application
 import com.taylorsloan.jobseer.dagger.scope.DataScope
 import com.taylorsloan.jobseer.data.model.MyObjectBox
 import dagger.Module
 import dagger.Provides
 import io.objectbox.BoxStore
+import java.io.File
 
 /**
- * Created by taylorsloan on 10/28/17.
+ * Created by taylo on 10/29/2017.
  */
 @Module
-class StorageModule {
+class TestStorageModule {
 
     @Provides
     @DataScope
-    fun provideBoxStore(application: Application) : BoxStore{
-        return MyObjectBox.builder().androidContext(application).build()
+    fun provideBoxStore() : BoxStore{
+        val tempFile = File.createTempFile("object-store-test", "")
+        tempFile.delete()
+        return MyObjectBox.builder().directory(tempFile).build()
     }
 }

@@ -1,12 +1,12 @@
-package com.taylorsloan.jobseer.data.repo.sources
+package com.taylorsloan.jobseer.data.repo
 
 import com.taylorsloan.jobseer.data.model.Job
 import io.reactivex.Observable
 
 /**
- * Created by taylorsloan on 10/28/17.
+ * Created by taylo on 10/29/2017.
  */
-interface DataSource {
+interface JobRepository {
     fun jobs(description: String? = null,
              location: String? = null,
              lat: Double? = null,

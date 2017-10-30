@@ -16,7 +16,8 @@ interface GitHubJobsService {
                 @Query("location") location: String? = null,
                 @Query("lat") lat: Double? = null,
                 @Query("long") long: Double? = null,
-                @Query("full_time") fullTime: Boolean? = null) : Single<List<Job>>
+                @Query("full_time") fullTime: Boolean? = null,
+                @Query("page") page: Int = 0) : Single<List<Job>>
 
     @GET("/positions/{id}.json")
     fun getJob(@Path("id") id: String) : Single<Job>

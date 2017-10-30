@@ -9,17 +9,22 @@ import javax.inject.Inject
 /**
  * Created by taylorsloan on 10/28/17.
  */
-class CloudDataSource : DataSource {
+class CloudDataSource(dataModule: DataModule) : DataSource {
 
     @Inject
     lateinit var githubService : GitHubJobsService
 
     init {
-        DataModule.netComponent.inject(this)
+        dataModule.netComponent().inject(this)
     }
 
-    override fun jobs(description: String?, location: String?, lat: Double?, long: Double?, fullTime: Boolean?): Observable<List<Job>> {
-        return githubService.getJobs(description, location, lat, long, fullTime).toObservable()
+    override fun jobs(description: String?,
+                      location: String?,
+                      lat: Double?,
+                      long: Double?,
+                      fullTime: Boolean?,
+                      page: Int): Observable<List<Job>> {
+        return githubService.getJobs(description, location, lat, long, fullTime, page).toObservable()
     }
 
     override fun job(id: String): Observable<Job> {
