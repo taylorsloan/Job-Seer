@@ -20,11 +20,15 @@ class JobRepositoryImpl : JobRepository {
         return dataSourceFactory.jobs()
     }
 
-    override fun getMoreJobs(description: String?, location: String?, lat: Double?, long: Double?, fullTime: Boolean?, page: Int){
-        dataSourceFactory.getMoreJobs(page = page)
+    override fun getMoreJobs(page: Int){
+        dataSourceFactory.getMoreJobs(page)
     }
 
-    override fun job(id: String): Observable<Job> {
+    override fun getJob(id: String): Observable<Job> {
         return dataSourceFactory.job(id)
+    }
+
+    override fun clearJobs() {
+        dataSourceFactory.clearJobs()
     }
 }

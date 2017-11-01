@@ -41,4 +41,8 @@ class LocalDataSource(dataModule: DataModule) : DataSource {
         return RxQuery.observable(jobBox.query().equal(Job_.id, id).build())
                 .map{ it[0]}
     }
+
+    override fun clearJobs() {
+        jobBox.removeAll()
+    }
 }

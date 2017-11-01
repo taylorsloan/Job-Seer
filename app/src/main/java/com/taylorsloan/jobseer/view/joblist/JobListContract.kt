@@ -10,9 +10,13 @@ interface JobListContract {
 
     interface View {
         fun showJobs(jobs : List<Job>)
+        fun showLoading()
+        fun hideLoading()
+        fun hideRefreshing()
     }
 
     interface Presenter : BasePresenter{
         fun loadMore(page: Int)
+        fun refresh()
     }
 }

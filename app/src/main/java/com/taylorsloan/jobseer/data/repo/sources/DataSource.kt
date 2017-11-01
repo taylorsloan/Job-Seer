@@ -15,4 +15,6 @@ interface DataSource {
              page: Int = 0) : Observable<List<Job>>
 
     fun job(id: String) : Observable<Job>
+
+    fun clearJobs()
 }

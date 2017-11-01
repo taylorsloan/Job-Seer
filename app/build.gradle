@@ -16,6 +16,7 @@ ext {
     androidSupportLibraryVersion = "27.0.0"
     retrofitVersion = "2.3.0"
     daggerVersion = "2.12"
+    leakCanaryVersion = "1.5.4"
 }
 
 android {
@@ -49,6 +50,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     kaptTest "com.google.dagger:dagger-compiler:$daggerVersion"
     kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
 
     implementation 'com.jakewharton.timber:timber:4.5.1'
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"

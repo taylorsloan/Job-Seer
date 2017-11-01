@@ -13,12 +13,9 @@ interface JobRepository {
                 long: Double? = null,
                 fullTime: Boolean? = null) : Observable<List<Job>>
 
-    fun getMoreJobs(description: String? = null,
-             location: String? = null,
-             lat: Double? = null,
-             long: Double? = null,
-             fullTime: Boolean? = null,
-             page: Int = 0)
+    fun getMoreJobs(page: Int = 0)
 
-    fun job(id: String) : Observable<Job>
+    fun getJob(id: String) : Observable<Job>
+
+    fun clearJobs()
 }

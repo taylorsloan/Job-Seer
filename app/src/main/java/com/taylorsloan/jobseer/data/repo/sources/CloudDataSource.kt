@@ -30,4 +30,8 @@ class CloudDataSource(dataModule: DataModule) : DataSource {
     override fun job(id: String): Observable<Job> {
         return githubService.getJob(id).toObservable()
     }
+
+    override fun clearJobs() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }

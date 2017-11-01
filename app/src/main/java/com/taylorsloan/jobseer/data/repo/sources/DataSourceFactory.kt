@@ -5,7 +5,7 @@ import com.taylorsloan.jobseer.data.model.Job
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableObserver
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
 
 /**
@@ -19,10 +19,9 @@ class DataSourceFactory(private val dataModule: DataModule) : DataSource{
     private var localJobsDisposable : Disposable? = null
     private var localJobDisposable : Disposable? = null
 
-    private var cloudJobsDisposable: Disposable? = null
     private var jobDisposable : Disposable? = null
 
-    private val subject : PublishSubject<List<Job>> = PublishSubject.create()
+    private val subject : BehaviorSubject<List<Job>> = BehaviorSubject.create()
 
     private var previousSearchParams : SearchParams? = null
 
@@ -57,7 +56,6 @@ class DataSourceFactory(private val dataModule: DataModule) : DataSource{
                     })
         }
         previousSearchParams = searchParams
-        getMoreJobs(page)
         return subject
     }
 
@@ -71,12 +69,7 @@ class DataSourceFactory(private val dataModule: DataModule) : DataSource{
                             },
                             {
                                 Timber.e(it)
-                            },
-                            {
-                                cloudJobsDisposable?.dispose()
-                            },
-                            {
-                                cloudJobsDisposable = it
+                                subject.onError(it)
                             }
                     )
         }
@@ -95,5 +88,9 @@ class DataSourceFactory(private val dataModule: DataModule) : DataSource{
                         }
                 )
         return localDataStore.job(id)
+    }
+
+    override fun clearJobs() {
+        localDataStore.clearJobs()
     }
 }
