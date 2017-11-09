@@ -1,6 +1,7 @@
 package com.taylorsloan.jobseer.data.repo
 
 import com.taylorsloan.jobseer.data.DataModuleImpl
+import com.taylorsloan.jobseer.data.model.DataResult
 import com.taylorsloan.jobseer.data.model.Job
 import com.taylorsloan.jobseer.data.repo.sources.DataSourceFactory
 import io.reactivex.Observable
@@ -16,7 +17,7 @@ class JobRepositoryImpl : JobRepository {
                          location: String?,
                          lat: Double?,
                          long: Double?,
-                         fullTime: Boolean?): Observable<List<Job>> {
+                         fullTime: Boolean?): Observable<DataResult<List<Job>>> {
         return dataSourceFactory.jobs()
     }
 
@@ -24,7 +25,7 @@ class JobRepositoryImpl : JobRepository {
         dataSourceFactory.getMoreJobs(page)
     }
 
-    override fun getJob(id: String): Observable<Job> {
+    override fun getJob(id: String): Observable<DataResult<Job>> {
         return dataSourceFactory.job(id)
     }
 

@@ -1,6 +1,7 @@
 package com.taylorsloan.jobseer.data.repo.sources
 
 import com.taylorsloan.jobseer.data.DataModule
+import com.taylorsloan.jobseer.data.model.DataResult
 import com.taylorsloan.jobseer.data.model.Job
 import com.taylorsloan.jobseer.data.model.Job_
 import io.objectbox.Box
@@ -33,13 +34,14 @@ class LocalDataSource(dataModule: DataModule) : DataSource {
                       lat: Double?,
                       long: Double?,
                       fullTime: Boolean?,
-                      page: Int): Observable<List<Job>> {
+                      page: Int): Observable<DataResult<List<Job>>> {
         return RxQuery.observable(jobBox.query().build())
+                .map { DataResult(data = it) }
     }
 
-    override fun job(id: String): Observable<Job> {
+    override fun job(id: String): Observable<DataResult<Job>> {
         return RxQuery.observable(jobBox.query().equal(Job_.id, id).build())
-                .map{ it[0]}
+                .map{ DataResult(data = it [0]) }
     }
 
     override fun clearJobs() {

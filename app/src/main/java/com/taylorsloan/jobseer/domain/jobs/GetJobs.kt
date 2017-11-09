@@ -1,5 +1,6 @@
 package com.taylorsloan.jobseer.domain.jobs
 
+import com.taylorsloan.jobseer.data.model.DataResult
 import com.taylorsloan.jobseer.data.model.Job
 import com.taylorsloan.jobseer.data.repo.JobRepository
 import com.taylorsloan.jobseer.domain.BaseUseCase
@@ -10,7 +11,7 @@ import javax.inject.Inject
 /**
  * Created by taylo on 10/29/2017.
  */
-class GetJobs(var page: Int = 0) : BaseUseCase<Observable<List<Job>>> {
+class GetJobs(var page: Int = 0) : BaseUseCase<Observable<DataResult<List<Job>>>> {
 
     @Inject
     lateinit var jobRepo : JobRepository
@@ -19,7 +20,7 @@ class GetJobs(var page: Int = 0) : BaseUseCase<Observable<List<Job>>> {
         DomainModuleImpl.dataComponent().inject(this)
     }
 
-    override fun execute(): Observable<List<Job>> {
+    override fun execute(): Observable<DataResult<List<Job>>> {
         return jobRepo.getJobs()
     }
 

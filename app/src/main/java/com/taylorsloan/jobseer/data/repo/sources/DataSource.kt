@@ -1,5 +1,6 @@
 package com.taylorsloan.jobseer.data.repo.sources
 
+import com.taylorsloan.jobseer.data.model.DataResult
 import com.taylorsloan.jobseer.data.model.Job
 import io.reactivex.Observable
 
@@ -12,9 +13,9 @@ interface DataSource {
              lat: Double? = null,
              long: Double? = null,
              fullTime: Boolean? = null,
-             page: Int = 0) : Observable<List<Job>>
+             page: Int = 0) : Observable<DataResult<List<Job>>>
 
-    fun job(id: String) : Observable<Job>
+    fun job(id: String) : Observable<DataResult<Job>>
 
     fun clearJobs()
 }

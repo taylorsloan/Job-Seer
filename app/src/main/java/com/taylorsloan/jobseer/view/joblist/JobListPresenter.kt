@@ -20,11 +20,16 @@ class JobListPresenter(var view: JobListContract.View?) : JobListContract.Presen
         getJobs.execute()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext{
+                    it.error?.let {
+                        throw it
+                    }
+                }
                 .subscribe(
                         {
                             view?.hideLoading()
                             view?.hideRefreshing()
-                            view?.showJobs(it)
+                            view?.showJobs(it.data!!)
                         },
                         {
                             Timber.e(it, "Error Getting Jobs")

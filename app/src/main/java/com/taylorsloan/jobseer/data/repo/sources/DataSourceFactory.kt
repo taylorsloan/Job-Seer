@@ -1,6 +1,7 @@
 package com.taylorsloan.jobseer.data.repo.sources
 
 import com.taylorsloan.jobseer.data.DataModule
+import com.taylorsloan.jobseer.data.model.DataResult
 import com.taylorsloan.jobseer.data.model.Job
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -20,8 +21,9 @@ class DataSourceFactory(private val dataModule: DataModule) : DataSource{
     private var localJobDisposable : Disposable? = null
 
     private var jobDisposable : Disposable? = null
+    private val jobPersistor = JobPersistor(dataModule)
 
-    private val subject : BehaviorSubject<List<Job>> = BehaviorSubject.create()
+    private val subject : BehaviorSubject<DataResult<List<Job>>> = BehaviorSubject.create()
 
     private var previousSearchParams : SearchParams? = null
 
@@ -31,22 +33,26 @@ class DataSourceFactory(private val dataModule: DataModule) : DataSource{
                                     val long: Double? = null,
                                     val fullTime: Boolean? = null)
 
+    init {
+        // jobPersistor.init()
+    }
+
     override fun jobs(description: String?,
                       location: String?,
                       lat: Double?,
                       long: Double?,
                       fullTime: Boolean?,
-                      page: Int): Observable<List<Job>> {
+                      page: Int): Observable<DataResult<List<Job>>> {
         val searchParams = SearchParams(description, location, lat, long, fullTime)
         if (previousSearchParams?.hashCode() != searchParams.hashCode()){
             localJobsDisposable?.dispose()
             localJobsDisposable = localDataStore.jobs(description, location, lat, long, fullTime)
-                    .subscribeWith(object: DisposableObserver<List<Job>>(){
+                    .subscribeWith(object: DisposableObserver<DataResult<List<Job>>>(){
                         override fun onError(e: Throwable) {
                             subject.onError(e)
                         }
 
-                        override fun onNext(t: List<Job>) {
+                        override fun onNext(t: DataResult<List<Job>>) {
                             subject.onNext(t)
                         }
 
@@ -56,26 +62,29 @@ class DataSourceFactory(private val dataModule: DataModule) : DataSource{
                     })
         }
         previousSearchParams = searchParams
-        return subject
+        return subject.doOnSubscribe{ jobPersistor.init() }
+                .doOnDispose{ jobPersistor.tearDown() }
     }
 
     fun getMoreJobs(page: Int) {
         previousSearchParams?.let {
             cloudDataStore.jobs(it.description, it.location, it.lat, it.long, it.fullTime, page)
-                    .compose(JobPersistor(dataModule))
                     .subscribe(
                             {
-                                Timber.d("Received Jobs: %s", it.size.toString())
+                                Timber.d("Received Jobs: %s", it.data?.size.toString())
+                                it.data?.let {
+                                    jobPersistor.persist(it)
+                                }
                             },
                             {
                                 Timber.e(it)
-                                subject.onError(it)
+                                subject.onNext(DataResult(error = it))
                             }
                     )
         }
     }
 
-    override fun job(id: String): Observable<Job> {
+    override fun job(id: String): Observable<DataResult<Job>> {
         cloudDataStore.job(id)
                 .subscribe(
                         {},

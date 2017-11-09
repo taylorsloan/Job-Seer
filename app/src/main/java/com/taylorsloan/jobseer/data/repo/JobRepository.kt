@@ -1,5 +1,6 @@
 package com.taylorsloan.jobseer.data.repo
 
+import com.taylorsloan.jobseer.data.model.DataResult
 import com.taylorsloan.jobseer.data.model.Job
 import io.reactivex.Observable
 
@@ -11,11 +12,11 @@ interface JobRepository {
                 location: String? = null,
                 lat: Double? = null,
                 long: Double? = null,
-                fullTime: Boolean? = null) : Observable<List<Job>>
+                fullTime: Boolean? = null) : Observable<DataResult<List<Job>>>
 
     fun getMoreJobs(page: Int = 0)
 
-    fun getJob(id: String) : Observable<Job>
+    fun getJob(id: String) : Observable<DataResult<Job>>
 
     fun clearJobs()
 }
