@@ -12,7 +12,7 @@ import javax.inject.Inject
 /**
  * Created by taylo on 10/29/2017.
  */
-class GetJob : BaseUseCase<Observable<DataResult<Job>>> {
+class GetJob(val jobId: String) : BaseUseCase<Observable<DataResult<Job>>> {
 
     @Inject
     lateinit var jobRepo : JobRepository
@@ -22,6 +22,6 @@ class GetJob : BaseUseCase<Observable<DataResult<Job>>> {
     }
 
     override fun execute(): Observable<DataResult<Job>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return jobRepo.getJob(jobId)
     }
 }

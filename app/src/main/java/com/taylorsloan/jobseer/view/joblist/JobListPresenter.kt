@@ -1,5 +1,6 @@
 package com.taylorsloan.jobseer.view.joblist
 
+import com.taylorsloan.jobseer.data.model.Job
 import com.taylorsloan.jobseer.domain.jobs.GetJobs
 import com.taylorsloan.jobseer.domain.jobs.RefreshJobs
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -22,7 +23,7 @@ class JobListPresenter(var view: JobListContract.View?) : JobListContract.Presen
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext{
                     it.error?.let {
-                        throw it
+
                     }
                 }
                 .subscribe(
@@ -54,5 +55,9 @@ class JobListPresenter(var view: JobListContract.View?) : JobListContract.Presen
 
     override fun refresh() {
         RefreshJobs().execute()
+    }
+
+    override fun openJobDetail(job: Job) {
+        view?.showJobDetail(job)
     }
 }

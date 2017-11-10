@@ -6,22 +6,26 @@ import android.os.Parcelable
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.View
 import com.taylorsloan.jobseer.R
 import com.taylorsloan.jobseer.data.model.Job
+import com.taylorsloan.jobseer.view.jobdetail.JobDetailActivity
 import com.taylorsloan.jobseer.view.joblist.model.Loading
 import io.nlopez.smartadapters.SmartAdapter
 import io.nlopez.smartadapters.adapters.RecyclerMultiAdapter
+import io.nlopez.smartadapters.utils.ViewEventListener
 import kotlinx.android.synthetic.main.activity_job_list.*
 import timber.log.Timber
 
 
-class JobListActivity : AppCompatActivity(), JobListContract.View{
+class JobListActivity : AppCompatActivity(), JobListContract.View, ViewEventListener<Job>{
 
     companion object {
         const val KEY_LIST_STATE = "recyclerViewState"
     }
 
-    val loadingMarker = Loading()
+    private val loadingMarker = Loading()
+    private var isShowingLoading = false
     var loadingPosition = 0
 
     private lateinit var presenter: JobListContract.Presenter
@@ -34,6 +38,7 @@ class JobListActivity : AppCompatActivity(), JobListContract.View{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_job_list)
+        listState = getListState(savedInstanceState)
         setupViews()
         setupInteractions()
     }
@@ -57,6 +62,7 @@ class JobListActivity : AppCompatActivity(), JobListContract.View{
         adapter = SmartAdapter.items(items)
                 .map(Job::class.java, JobView::class.java)
                 .map(Loading::class.java, LoadingView::class.java)
+                .listener(this)
                 .into(recyclerView)
         val scrollListener = object : EndlessRecyclerViewScrollListener(recyclerView.layoutManager){
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView) {
@@ -90,11 +96,24 @@ class JobListActivity : AppCompatActivity(), JobListContract.View{
     }
 
     override fun showLoading() {
-        items.add(loadingMarker)
+
+        frameLayout_loading.visibility = View.VISIBLE
     }
 
     override fun hideLoading() {
-        items.remove(loadingMarker)
+        frameLayout_loading.visibility = View.GONE
+    }
+
+    private fun findLastVisibleView() : View{
+        val lm = recyclerView.layoutManager as LinearLayoutManager
+        val lastVisiblePosition = lm.findLastVisibleItemPosition()
+        return lm.findViewByPosition(lastVisiblePosition)
+    }
+
+    override fun showJobDetail(job: Job) {
+        job.id?.let {
+            JobDetailActivity.startActivity(this, it)
+        }
     }
 
     override fun hideRefreshing() {
@@ -109,6 +128,20 @@ class JobListActivity : AppCompatActivity(), JobListContract.View{
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
         super.onRestoreInstanceState(savedInstanceState)
-        listState = savedInstanceState?.getParcelable(KEY_LIST_STATE)
+        listState = getListState(savedInstanceState)
+    }
+
+    fun getListState(savedInstanceState: Bundle?) : Parcelable?{
+        return savedInstanceState?.getParcelable(KEY_LIST_STATE)
+    }
+
+    override fun onViewEvent(actionId: Int, item: Job?, position: Int, view: View?) {
+        when(actionId){
+            JobView.ACTION_SELECTED->{
+                item?.let {
+                    presenter.openJobDetail(item)
+                }
+            }
+        }
     }
 }

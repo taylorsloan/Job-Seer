@@ -26,7 +26,7 @@ class CloudDataSourceTest : AbstractObjectBoxTest(){
     @Test
     fun testJob(){
         dataSource.jobs().flatMap {
-            dataSource.job(it[0].id!!)
+            dataSource.job(it.data!![0].id!!)
         }.test().assertNoErrors()
     }
 }

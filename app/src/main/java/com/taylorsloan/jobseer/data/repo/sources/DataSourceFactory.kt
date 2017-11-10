@@ -20,7 +20,6 @@ class DataSourceFactory(private val dataModule: DataModule) : DataSource{
     private var localJobsDisposable : Disposable? = null
     private var localJobDisposable : Disposable? = null
 
-    private var jobDisposable : Disposable? = null
     private val jobPersistor = JobPersistor(dataModule)
 
     private val subject : BehaviorSubject<DataResult<List<Job>>> = BehaviorSubject.create()
@@ -87,13 +86,14 @@ class DataSourceFactory(private val dataModule: DataModule) : DataSource{
     override fun job(id: String): Observable<DataResult<Job>> {
         cloudDataStore.job(id)
                 .subscribe(
-                        {},
-                        {},
                         {
-                            jobDisposable?.dispose()
+                            it.data?.let {
+                                jobPersistor.persist(arrayListOf(it))
+                            }
                         },
                         {
-                            jobDisposable = it
+                            Timber.e(it)
+                            subject.onNext(DataResult(error = it))
                         }
                 )
         return localDataStore.job(id)

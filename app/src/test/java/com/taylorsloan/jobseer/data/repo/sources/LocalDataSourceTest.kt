@@ -2,6 +2,8 @@ package com.taylorsloan.jobseer.data.repo.sources
 
 import com.taylorsloan.jobseer.AbstractObjectBoxTest
 import com.taylorsloan.jobseer.data.TestDataModuleImpl
+import com.taylorsloan.jobseer.data.model.DataResult
+import com.taylorsloan.jobseer.data.model.Job
 import org.junit.Before
 import org.junit.Test
 
@@ -25,8 +27,8 @@ class LocalDataSourceTest : AbstractObjectBoxTest(){
 
     @Test
     fun testJob(){
-        dataSource.jobs().single(ArrayList(0))
-                .map { dataSource.job(it[0].id!!) }
+        dataSource.jobs().single(DataResult(data = ArrayList<Job>(0)))
+                .map { dataSource.job(it.data!![0].id!!) }
                 .test().assertNoErrors().dispose()
     }
 
