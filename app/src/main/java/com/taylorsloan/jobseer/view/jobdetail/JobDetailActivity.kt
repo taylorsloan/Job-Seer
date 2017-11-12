@@ -75,7 +75,7 @@ class JobDetailActivity : AppCompatActivity(), JobDetailContract.View,
     private fun setupInteractions(){
         fab.setOnClickListener { view ->
             Snackbar.make(view, R.string.activity_job_detail_open_website, Snackbar.LENGTH_LONG)
-                    .setAction(R.string.activity_job_detail_open, { presenter.openCompanyWebPage()}).show()
+                    .setAction(R.string.activity_job_detail_open, { presenter.openApplicationPage()}).show()
         }
     }
 
@@ -92,6 +92,7 @@ class JobDetailActivity : AppCompatActivity(), JobDetailContract.View,
             }
 
             R.id.action_share -> {
+                presenter.openShareJobDialog()
                 true
             }
 
@@ -180,6 +181,15 @@ class JobDetailActivity : AppCompatActivity(), JobDetailContract.View,
     override fun showRemoteLocation() {
         frameLayout_map.visibility = View.GONE
         frameLayout_remote.visibility = View.VISIBLE
+    }
+
+    override fun showShareJobDialog(company: String, position: String, link: String) {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.putExtra(Intent.EXTRA_TEXT, "Hey, check out this job for a " +
+                "$position at $company. Apply Here: $link")
+        intent.type = "text/plain"
+        startActivity(Intent.createChooser(intent, resources
+                .getText(R.string.activity_job_detail_share)))
     }
 
     override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {

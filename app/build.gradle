@@ -69,6 +69,7 @@ dependencies {
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
 
+    implementation 'org.jsoup:jsoup:1.11.1'
     implementation 'com.lapism:searchview:5.0.0-alpha7'
     implementation 'jp.wasabeef:picasso-transformations:2.1.2'
     implementation 'de.hdodenhof:circleimageview:2.2.0'

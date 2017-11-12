@@ -5,6 +5,8 @@ import com.taylorsloan.jobseer.domain.jobs.GetCoordinatesFromAddress
 import com.taylorsloan.jobseer.domain.jobs.GetJob
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import timber.log.Timber
 
 /**
@@ -54,6 +56,30 @@ class JobDetailPresenter(private var view: JobDetailContract.View?, private val 
             view?.showCompanyWebPage(link!!)
         } else {
             view?.showCompanyWebPageLoadError()
+        }
+    }
+
+    override fun openApplicationPage() {
+        val applicationLink = parseApplicationLink()
+        if (!applicationLink.isNullOrEmpty()){
+            view?.showCompanyWebPage(applicationLink!!)
+        } else {
+            view?.showCompanyWebPageLoadError()
+        }
+    }
+
+    private fun parseApplicationLink() : String? {
+        val htmlString  = job?.how_to_apply
+        val doc = Jsoup.parse(htmlString)
+        val links = doc.select("a[href]")
+        return links[0].attr("href")
+    }
+
+    override fun openShareJobDialog() {
+        val applicationLink = parseApplicationLink()
+        if (!applicationLink.isNullOrEmpty()) {
+            view?.showShareJobDialog(job?.company ?: "null", job?.title ?: "null",
+                    applicationLink ?: "null")
         }
     }
 

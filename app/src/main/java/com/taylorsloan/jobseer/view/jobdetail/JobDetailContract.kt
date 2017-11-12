@@ -14,9 +14,12 @@ interface JobDetailContract {
         fun showRemoteLocation()
         fun showCompanyWebPage(url : String)
         fun showCompanyWebPageLoadError()
+        fun showShareJobDialog(company: String, position: String, link: String)
     }
 
     interface Presenter : BasePresenter{
         fun openCompanyWebPage()
+        fun openApplicationPage()
+        fun openShareJobDialog()
     }
 }
