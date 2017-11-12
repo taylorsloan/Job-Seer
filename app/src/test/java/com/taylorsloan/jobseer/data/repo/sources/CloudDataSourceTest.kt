@@ -2,6 +2,7 @@ package com.taylorsloan.jobseer.data.repo.sources
 
 import com.taylorsloan.jobseer.AbstractObjectBoxTest
 import com.taylorsloan.jobseer.data.TestDataModuleImpl
+import com.taylorsloan.jobseer.data.repo.sources.jobs.CloudDataSource
 import org.junit.Before
 import org.junit.Test
 

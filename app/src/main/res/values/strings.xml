@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Job Seer</string>
+
     <string name="title_activity_job_detail">JobDetailActivity</string>
+    <string name="menu_save">Save</string>
+    <string name="menu_share">Share</string>
+    <string name="activity_job_detail_url_error">Could not open link</string>
+    <string name="activity_job_detail_open_website">Open Company Website?</string>
+    <string name="activity_job_detail_open">OPEN</string>
 </resources>

@@ -8,25 +8,6 @@
     android:animateLayoutChanges="true"
     tools:context="com.taylorsloan.jobseer.view.joblist.JobListActivity">
 
-    <FrameLayout
-        android:id="@+id/frameLayout_bar"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:background="@color/colorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.lapism.searchview.SearchView
-            android:id="@+id/searchView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-    </FrameLayout>
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="0dp"
@@ -34,7 +15,7 @@
         app:layout_constraintBottom_toTopOf="@+id/frameLayout_loading"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout_bar">
+        app:layout_constraintTop_toTopOf="parent">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"

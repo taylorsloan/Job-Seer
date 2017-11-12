@@ -1,4 +1,4 @@
-package com.taylorsloan.jobseer.data.repo.sources
+package com.taylorsloan.jobseer.data.repo.sources.jobs
 
 import com.taylorsloan.jobseer.data.DataModule
 import com.taylorsloan.jobseer.data.model.DataResult

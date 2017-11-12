@@ -1,6 +1,7 @@
 package com.taylorsloan.jobseer.dagger.module
 
 import com.taylorsloan.jobseer.dagger.scope.DataScope
+import com.taylorsloan.jobseer.data.service.GeocodingService
 import com.taylorsloan.jobseer.data.service.GitHubJobsService
 import dagger.Module
 import dagger.Provides
@@ -27,5 +28,11 @@ class NetModule(baseUrl : String) {
     @DataScope
     fun provideGitHubJobService() : GitHubJobsService{
         return retrofit.create(GitHubJobsService::class.java)
+    }
+
+    @Provides
+    @DataScope
+    fun provideGeocodingService() : GeocodingService{
+        return retrofit.create(GeocodingService::class.java)
     }
 }

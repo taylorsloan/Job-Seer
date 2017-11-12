@@ -3,7 +3,7 @@ package com.taylorsloan.jobseer.data.repo
 import com.taylorsloan.jobseer.data.DataModuleImpl
 import com.taylorsloan.jobseer.data.model.DataResult
 import com.taylorsloan.jobseer.data.model.Job
-import com.taylorsloan.jobseer.data.repo.sources.DataSourceFactory
+import com.taylorsloan.jobseer.data.repo.sources.jobs.DataSourceFactory
 import io.reactivex.Observable
 
 /**

@@ -1,4 +1,4 @@
-package com.taylorsloan.jobseer.data.repo.sources
+package com.taylorsloan.jobseer.data.repo.sources.jobs
 
 import com.taylorsloan.jobseer.data.DataModule
 import com.taylorsloan.jobseer.data.model.DataResult
@@ -12,7 +12,7 @@ import timber.log.Timber
 /**
  * Created by taylorsloan on 10/28/17.
  */
-class DataSourceFactory(private val dataModule: DataModule) : DataSource{
+class DataSourceFactory(dataModule: DataModule) : DataSource {
 
     private val localDataStore : DataSource = LocalDataSource(dataModule)
     private val cloudDataStore : DataSource = CloudDataSource(dataModule)

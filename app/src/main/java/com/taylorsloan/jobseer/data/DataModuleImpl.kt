@@ -12,6 +12,7 @@ import com.taylorsloan.jobseer.dagger.module.StorageModule
 object DataModuleImpl : DataModule{
 
     const val GITHUB_JOBS_URL  = "https://jobs.github.com"
+    const val GEOCODING_API_KEY = "AIzaSyBp_sX6OLut-EP5ji995TBeaaDFl54JrPE"
 
     private val netComponent : NetComponent = DaggerNetComponent.builder()
             .netModule(NetModule(GITHUB_JOBS_URL))

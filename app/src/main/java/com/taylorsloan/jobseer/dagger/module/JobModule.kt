@@ -1,6 +1,8 @@
 package com.taylorsloan.jobseer.dagger.module
 
 import com.taylorsloan.jobseer.dagger.scope.DataScope
+import com.taylorsloan.jobseer.data.repo.CoordinatesRepository
+import com.taylorsloan.jobseer.data.repo.CoordinatesRepositoryImpl
 import com.taylorsloan.jobseer.data.repo.JobRepository
 import com.taylorsloan.jobseer.data.repo.JobRepositoryImpl
 import dagger.Module
@@ -16,5 +18,11 @@ class JobModule {
     @DataScope
     fun provideJobRepo() : JobRepository{
         return JobRepositoryImpl()
+    }
+
+    @Provides
+    @DataScope
+    fun provideCoordinatesRepo() : CoordinatesRepository{
+        return CoordinatesRepositoryImpl()
     }
 }

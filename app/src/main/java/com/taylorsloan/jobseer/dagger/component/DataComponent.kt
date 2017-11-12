@@ -2,6 +2,7 @@ package com.taylorsloan.jobseer.dagger.component
 
 import com.taylorsloan.jobseer.dagger.module.JobModule
 import com.taylorsloan.jobseer.dagger.scope.DataScope
+import com.taylorsloan.jobseer.domain.jobs.GetCoordinatesFromAddress
 import com.taylorsloan.jobseer.domain.jobs.GetJob
 import com.taylorsloan.jobseer.domain.jobs.GetJobs
 import com.taylorsloan.jobseer.domain.jobs.RefreshJobs
@@ -16,4 +17,5 @@ interface DataComponent {
     fun inject(getJob: GetJob)
     fun inject(getJobs: GetJobs)
     fun inject(refreshJobs: RefreshJobs)
+    fun inject(getCoordinatesFromAddress: GetCoordinatesFromAddress)
 }

@@ -1,4 +1,4 @@
-package com.taylorsloan.jobseer.data.repo.sources
+package com.taylorsloan.jobseer.data.repo.sources.jobs
 
 import com.taylorsloan.jobseer.data.DataModule
 import com.taylorsloan.jobseer.data.model.DataResult
@@ -6,9 +6,6 @@ import com.taylorsloan.jobseer.data.model.Job
 import com.taylorsloan.jobseer.data.model.Job_
 import io.objectbox.Box
 import io.objectbox.BoxStore
-import io.reactivex.Observable
-import io.reactivex.ObservableSource
-import io.reactivex.ObservableTransformer
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject

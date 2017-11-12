@@ -2,6 +2,7 @@ package com.taylorsloan.jobseer.dagger.component
 
 import com.taylorsloan.jobseer.dagger.module.TestNetModule
 import com.taylorsloan.jobseer.dagger.scope.DataScope
+import com.taylorsloan.jobseer.data.service.GeocodingServiceTest
 import com.taylorsloan.jobseer.data.service.GitHubJobsServiceTest
 import dagger.Component
 
@@ -12,4 +13,5 @@ import dagger.Component
 @Component(modules = arrayOf(TestNetModule::class))
 interface TestNetComponent : NetComponent{
     fun inject(serviceTest: GitHubJobsServiceTest)
+    fun inject(serviceTest: GeocodingServiceTest)
 }

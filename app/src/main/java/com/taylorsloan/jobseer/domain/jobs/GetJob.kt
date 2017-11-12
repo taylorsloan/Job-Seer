@@ -12,7 +12,7 @@ import javax.inject.Inject
 /**
  * Created by taylo on 10/29/2017.
  */
-class GetJob(val jobId: String) : BaseUseCase<Observable<DataResult<Job>>> {
+class GetJob(private val jobId: String) : BaseUseCase<Observable<DataResult<Job>>> {
 
     @Inject
     lateinit var jobRepo : JobRepository

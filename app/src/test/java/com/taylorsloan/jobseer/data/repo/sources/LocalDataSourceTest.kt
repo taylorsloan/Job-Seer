@@ -4,6 +4,7 @@ import com.taylorsloan.jobseer.AbstractObjectBoxTest
 import com.taylorsloan.jobseer.data.TestDataModuleImpl
 import com.taylorsloan.jobseer.data.model.DataResult
 import com.taylorsloan.jobseer.data.model.Job
+import com.taylorsloan.jobseer.data.repo.sources.jobs.LocalDataSource
 import org.junit.Before
 import org.junit.Test
 
