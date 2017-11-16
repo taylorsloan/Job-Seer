@@ -64,8 +64,8 @@ class JobListFragment : Fragment(), JobListContract.View, ViewEventListener<Job>
         presenter.subscribe()
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroyView() {
+        super.onDestroyView()
         recyclerView.clearOnScrollListeners()
     }
 

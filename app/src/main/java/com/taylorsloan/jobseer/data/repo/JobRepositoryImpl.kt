@@ -17,17 +17,14 @@ class JobRepositoryImpl : JobRepository {
                          location: String?,
                          lat: Double?,
                          long: Double?,
-                         fullTime: Boolean?): Observable<DataResult<List<Job>>> {
-        return dataSourceFactory.jobs(description)
-    }
+                         fullTime: Boolean?): Observable<DataResult<List<Job>>> =
+            dataSourceFactory.jobs(description)
 
     override fun getMoreJobs(page: Int){
         dataSourceFactory.getMoreJobs(page)
     }
 
-    override fun getJob(id: String): Observable<DataResult<Job>> {
-        return dataSourceFactory.job(id)
-    }
+    override fun getJob(id: String): Observable<DataResult<Job>> = dataSourceFactory.job(id)
 
     override fun clearJobs() {
         dataSourceFactory.clearJobs()
