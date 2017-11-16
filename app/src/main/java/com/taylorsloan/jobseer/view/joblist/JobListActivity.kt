@@ -104,6 +104,10 @@ class JobListActivity : AppCompatActivity(), JobListContract.View, ViewEventList
         frameLayout_loading.visibility = View.GONE
     }
 
+    override fun searchJobs(query: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     private fun findLastVisibleView() : View{
         val lm = recyclerView.layoutManager as LinearLayoutManager
         val lastVisiblePosition = lm.findLastVisibleItemPosition()

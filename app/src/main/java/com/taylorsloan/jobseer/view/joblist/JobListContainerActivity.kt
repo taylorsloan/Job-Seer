@@ -17,6 +17,8 @@ class JobListContainerActivity : AppCompatActivity() {
 
     private lateinit var historyDatabase : SearchHistoryTable
 
+    private var jobListView : JobListContract.View? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_job_list_container)
@@ -28,18 +30,24 @@ class JobListContainerActivity : AppCompatActivity() {
 
     private fun setupViews(){
         initJobListFragment()
-        historyDatabase = SearchHistoryTable(this)
+//        historyDatabase = SearchHistoryTable(this)
     }
 
     private fun setupInteractions(){
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                historyDatabase.addItem(SearchItem(query))
-                searchView.close(false)
+//                historyDatabase.addItem(SearchItem(query))
+                if (!query.isNullOrEmpty()){
+                    jobListView?.searchJobs(query!!)
+                    searchView.close(false)
+                }
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+
+                }
                 return false
             }
         })
@@ -50,6 +58,7 @@ class JobListContainerActivity : AppCompatActivity() {
         if (fragment == null){
             fragment = JobListFragment.newInstance()
         }
+        jobListView = fragment as? JobListContract.View
         supportFragmentManager.beginTransaction()
                 .replace(R.id.frameLayout_container, fragment, FRAGMENT_TAG_GITHUB_JOB)
                 .commit()

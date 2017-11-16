@@ -18,6 +18,10 @@ class JobListPresenter(var view: JobListContract.View?) : JobListContract.Presen
     private val getJobs = GetJobs()
 
     override fun subscribe() {
+        loadData()
+    }
+
+    private fun loadData(){
         getJobs.execute()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -51,6 +55,12 @@ class JobListPresenter(var view: JobListContract.View?) : JobListContract.Presen
         getJobs.page = page
         getJobs.getMore()
         view?.showLoading()
+    }
+
+    override fun searchJobs(query: String) {
+        disposable.clear()
+        getJobs.description = query
+        loadData()
     }
 
     override fun refresh() {

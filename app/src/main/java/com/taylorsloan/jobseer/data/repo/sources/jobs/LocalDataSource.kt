@@ -6,6 +6,7 @@ import com.taylorsloan.jobseer.data.model.Job
 import com.taylorsloan.jobseer.data.model.Job_
 import io.objectbox.Box
 import io.objectbox.BoxStore
+import io.objectbox.query.QueryBuilder
 import io.objectbox.rx.RxQuery
 import io.reactivex.Observable
 import javax.inject.Inject
@@ -35,8 +36,18 @@ class LocalDataSource(dataModule: DataModule) : DataSource {
                       long: Double?,
                       fullTime: Boolean?,
                       page: Int): Observable<DataResult<List<Job>>> {
-        return RxQuery.observable(jobBox.query().build())
+        val queryBuilder = jobBox.query()
+        addSearchQuery(queryBuilder, description)
+        return RxQuery.observable(queryBuilder.build())
                 .map { DataResult(data = it) }
+    }
+
+    private fun addSearchQuery(queryBuilder: QueryBuilder<Job>, search: String?) :
+            QueryBuilder<Job>{
+        search?.let {
+            queryBuilder.contains(Job_.description, it)
+        }
+        return queryBuilder
     }
 
     override fun job(id: String): Observable<DataResult<Job>> {
