@@ -12,15 +12,13 @@ import timber.log.Timber
 /**
  * Created by taylorsloan on 10/28/17.
  */
-class DataSourceFactory(dataModule: DataModule) : DataSource {
+class DataSourceFactory(dataModule: DataModule, val jobPersistor: JobPersistor) : DataSource {
 
     private val localDataStore : DataSource = LocalDataSource(dataModule)
     private val cloudDataStore : DataSource = CloudDataSource(dataModule)
 
     private var localJobsDisposable : Disposable? = null
     private var localJobDisposable : Disposable? = null
-
-    private val jobPersistor = JobPersistor(dataModule)
 
     private val subject : BehaviorSubject<DataResult<List<Job>>> = BehaviorSubject.create()
 
@@ -61,8 +59,7 @@ class DataSourceFactory(dataModule: DataModule) : DataSource {
                     })
         }
         previousSearchParams = searchParams
-        return subject.doOnSubscribe{ jobPersistor.init() }
-                .doOnDispose{ jobPersistor.tearDown() }
+        return subject
     }
 
     fun getMoreJobs(page: Int) {

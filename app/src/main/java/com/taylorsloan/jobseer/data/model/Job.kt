@@ -19,4 +19,5 @@ data class Job (@Id var dbId : Long = 0,
                 var company: String?,
                 var company_url: String?,
                 var company_logo: String?,
-                var url: String?)
+                var url: String?,
+                var saved: Boolean? = false)

@@ -8,4 +8,5 @@
     <color name="colorAccentDark">#c43e00</color>
     <color name="colorPrimaryText">#fafafa</color>
     <color name="colorSecondaryText">#fafafa</color>
+    <color name="light_gray">#cfd8dc</color>
 </resources>

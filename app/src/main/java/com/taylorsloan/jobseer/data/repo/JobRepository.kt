@@ -18,5 +18,7 @@ interface JobRepository {
 
     fun getJob(id: String) : Observable<DataResult<Job>>
 
+    fun saveJob(id: String)
+
     fun clearJobs()
 }

@@ -27,15 +27,9 @@ object DataModuleImpl : DataModule{
             .jobModule(JobModule())
             .build()
 
-    override fun netComponent(): NetComponent {
-        return netComponent
-    }
+    override fun netComponent(): NetComponent = netComponent
 
-    override fun storageComponent(): StorageComponent {
-        return storageComponent
-    }
+    override fun storageComponent(): StorageComponent = storageComponent
 
-    override fun dataComponent(): DataComponent {
-        return dataComponent
-    }
+    override fun dataComponent(): DataComponent = dataComponent
 }

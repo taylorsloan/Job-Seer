@@ -123,6 +123,7 @@ class JobDetailActivity : AppCompatActivity(), JobDetailContract.View,
     override fun showJob(job: Job) {
         textView_jobName.text = job.title
         textView_companyName.text = job.company
+        textView_location.text = job.location
         Picasso.with(this).load(job.company_logo)
                 .transform(RoundedCornersTransformation(10, 0))
                 .fit()

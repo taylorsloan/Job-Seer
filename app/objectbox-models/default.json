@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:7557905300915581383",
-      "lastPropertyId": "12:3387184302500618839",
+      "lastPropertyId": "14:6761401568017981149",
       "name": "Job",
       "properties": [
         {
@@ -56,6 +56,10 @@
         {
           "id": "12:3387184302500618839",
           "name": "url"
+        },
+        {
+          "id": "14:6761401568017981149",
+          "name": "saved"
         }
       ],
       "relations": []
@@ -69,7 +73,9 @@
   "modelVersionParserMinimum": 4,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    3866394219476356764
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

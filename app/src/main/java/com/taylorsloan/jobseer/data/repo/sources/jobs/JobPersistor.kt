@@ -42,12 +42,17 @@ class JobPersistor(dataModule: DataModule) {
         consumerSubject.subscribeOn(Schedulers.io())
                 .subscribe(
                         {
-                            it.data?.let {
-                                it.forEach {
-                                    val savedJob = jobBox.query().equal(Job_.id, it.id!!).build().findUnique()
-                                    it.dbId = savedJob?.dbId ?: 0
+                            boxStore.runInTx {
+                                it.data?.let {
+                                    it.forEach {
+                                        val savedJob = jobBox.query().
+                                                equal(Job_.id, it.id!!)
+                                                .build()
+                                                .findUnique()
+                                        it.dbId = savedJob?.dbId ?: 0
+                                    }
+                                    jobBox.put(it)
                                 }
-                                jobBox.put(it)
                             }
                         },
                         {
