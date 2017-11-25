@@ -1,4 +1,4 @@
-package com.taylorsloan.jobseer.view.joblist
+package com.taylorsloan.jobseer.view.joblist.common
 
 import com.taylorsloan.jobseer.data.model.Job
 import com.taylorsloan.jobseer.domain.jobs.GetJobs

@@ -24,8 +24,9 @@ class JobRepositoryImpl : JobRepository {
                          location: String?,
                          lat: Double?,
                          long: Double?,
-                         fullTime: Boolean?): Observable<DataResult<List<Job>>> =
-            dataSourceFactory.jobs(description)
+                         fullTime: Boolean?,
+                         saved: Boolean?): Observable<DataResult<List<Job>>> =
+            dataSourceFactory.jobs(description = description, saved = saved)
 
     override fun getMoreJobs(page: Int){
         dataSourceFactory.getMoreJobs(page)

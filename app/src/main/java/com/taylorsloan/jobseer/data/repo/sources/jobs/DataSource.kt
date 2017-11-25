@@ -13,7 +13,8 @@ interface DataSource {
              lat: Double? = null,
              long: Double? = null,
              fullTime: Boolean? = null,
-             page: Int = 0) : Observable<DataResult<List<Job>>>
+             page: Int = 0,
+             saved: Boolean? = null) : Observable<DataResult<List<Job>>>
 
     fun job(id: String) : Observable<DataResult<Job>>
 

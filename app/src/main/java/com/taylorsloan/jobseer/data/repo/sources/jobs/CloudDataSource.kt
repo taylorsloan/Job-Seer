@@ -24,7 +24,8 @@ class CloudDataSource(dataModule: DataModule) : DataSource {
                       lat: Double?,
                       long: Double?,
                       fullTime: Boolean?,
-                      page: Int): Observable<DataResult<List<Job>>> {
+                      page: Int,
+                      saved: Boolean?): Observable<DataResult<List<Job>>> {
         return githubService.getJobs(description, location, lat, long, fullTime, page)
                 .map { DataResult(data = it) }
                 .toObservable()

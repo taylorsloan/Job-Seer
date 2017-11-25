@@ -1,8 +1,8 @@
 package com.taylorsloan.jobseer.view.joblist
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Parcelable
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -10,6 +10,7 @@ import android.view.View
 import com.taylorsloan.jobseer.R
 import com.taylorsloan.jobseer.data.model.Job
 import com.taylorsloan.jobseer.view.jobdetail.JobDetailActivity
+import com.taylorsloan.jobseer.view.joblist.common.*
 import com.taylorsloan.jobseer.view.joblist.model.Loading
 import io.nlopez.smartadapters.SmartAdapter
 import io.nlopez.smartadapters.adapters.RecyclerMultiAdapter

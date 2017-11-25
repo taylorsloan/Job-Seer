@@ -35,17 +35,27 @@ class LocalDataSource(dataModule: DataModule) : DataSource {
                       lat: Double?,
                       long: Double?,
                       fullTime: Boolean?,
-                      page: Int): Observable<DataResult<List<Job>>> {
+                      page: Int,
+                      saved: Boolean?): Observable<DataResult<List<Job>>> {
         val queryBuilder = jobBox.query()
         addSearchQuery(queryBuilder, description)
+        addSavedQuery(queryBuilder, saved)
         return RxQuery.observable(queryBuilder.build())
                 .map { DataResult(data = it) }
     }
 
     private fun addSearchQuery(queryBuilder: QueryBuilder<Job>, search: String?) :
-            QueryBuilder<Job>{
+            QueryBuilder<Job> {
         search?.let {
             queryBuilder.contains(Job_.description, it)
+        }
+        return queryBuilder
+    }
+
+    private fun addSavedQuery(queryBuilder: QueryBuilder<Job>, saved: Boolean?) :
+            QueryBuilder<Job> {
+        saved?.let {
+            queryBuilder.equal(Job_.saved, saved)
         }
         return queryBuilder
     }

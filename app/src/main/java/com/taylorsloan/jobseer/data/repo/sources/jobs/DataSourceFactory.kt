@@ -28,7 +28,8 @@ class DataSourceFactory(dataModule: DataModule, val jobPersistor: JobPersistor) 
                                     val location: String? = null,
                                     val lat: Double? = null,
                                     val long: Double? = null,
-                                    val fullTime: Boolean? = null)
+                                    val fullTime: Boolean? = null,
+                                    val saved: Boolean? = null)
 
     init {
         // jobPersistor.init()
@@ -39,11 +40,12 @@ class DataSourceFactory(dataModule: DataModule, val jobPersistor: JobPersistor) 
                       lat: Double?,
                       long: Double?,
                       fullTime: Boolean?,
-                      page: Int): Observable<DataResult<List<Job>>> {
-        val searchParams = SearchParams(description, location, lat, long, fullTime)
+                      page: Int,
+                      saved: Boolean?): Observable<DataResult<List<Job>>> {
+        val searchParams = SearchParams(description, location, lat, long, fullTime, saved)
         if (previousSearchParams?.hashCode() != searchParams.hashCode()){
             localJobsDisposable?.dispose()
-            localJobsDisposable = localDataStore.jobs(description, location, lat, long, fullTime)
+            localJobsDisposable = localDataStore.jobs(description, location, lat, long, fullTime, page, saved)
                     .subscribeWith(object: DisposableObserver<DataResult<List<Job>>>(){
                         override fun onError(e: Throwable) {
                             subject.onError(e)

@@ -17,7 +17,8 @@ class GetJobs(var page: Int = 0,
               var location: String? = null,
               var lat: Double? = null,
               var long: Double? = null,
-              var fullTime: Boolean? = null) : BaseUseCase<Observable<DataResult<List<Job>>>> {
+              var fullTime: Boolean? = null,
+              var saved: Boolean? = null) : BaseUseCase<Observable<DataResult<List<Job>>>> {
 
     @Inject
     lateinit var jobRepo : JobRepository
@@ -27,7 +28,7 @@ class GetJobs(var page: Int = 0,
     }
 
     override fun execute(): Observable<DataResult<List<Job>>> {
-        return jobRepo.getJobs(description, location, lat, long, fullTime)
+        return jobRepo.getJobs(description, location, lat, long, fullTime, saved)
     }
 
     fun getMore(){

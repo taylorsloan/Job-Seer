@@ -12,7 +12,8 @@ interface JobRepository {
                 location: String? = null,
                 lat: Double? = null,
                 long: Double? = null,
-                fullTime: Boolean? = null) : Observable<DataResult<List<Job>>>
+                fullTime: Boolean? = null,
+                saved: Boolean? = null) : Observable<DataResult<List<Job>>>
 
     fun getMoreJobs(page: Int = 0)
 

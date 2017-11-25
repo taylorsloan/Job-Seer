@@ -1,11 +1,10 @@
-package com.taylorsloan.jobseer.view.joblist
+package com.taylorsloan.jobseer.view.joblist.common
 
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.app.Fragment
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +12,7 @@ import android.widget.Toast
 import com.taylorsloan.jobseer.R
 import com.taylorsloan.jobseer.data.model.Job
 import com.taylorsloan.jobseer.view.jobdetail.JobDetailActivity
+import com.taylorsloan.jobseer.view.joblist.LoadingView
 import com.taylorsloan.jobseer.view.joblist.model.Loading
 import io.nlopez.smartadapters.SmartAdapter
 import io.nlopez.smartadapters.adapters.RecyclerMultiAdapter
@@ -23,23 +23,18 @@ import timber.log.Timber
 /**
  * Created by taylorsloan on 11/10/17.
  */
-class JobListFragment : Fragment(), JobListContract.View, ViewEventListener<Job> {
+abstract class AbstractJobListFragment : Fragment(), JobListContract.View, ViewEventListener<Job> {
 
     companion object {
         const val KEY_LIST_STATE = "recyclerViewState"
-
-        fun newInstance() : JobListFragment{
-            return JobListFragment()
-        }
     }
 
-    private lateinit var presenter: JobListContract.Presenter
+    protected lateinit var presenter: JobListContract.Presenter
     private lateinit var adapter: RecyclerMultiAdapter
 
     private lateinit var items : ArrayList<Any>
 
     private var listState : Parcelable? = null
-    private lateinit var scrollListener : EndlessRecyclerViewScrollListener
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -54,6 +49,8 @@ class JobListFragment : Fragment(), JobListContract.View, ViewEventListener<Job>
         setupInteractions()
     }
 
+    abstract fun providePresenter() : JobListContract.Presenter
+
     override fun onPause() {
         super.onPause()
         presenter.unsubscribe()
@@ -66,7 +63,6 @@ class JobListFragment : Fragment(), JobListContract.View, ViewEventListener<Job>
 
     override fun onDestroyView() {
         super.onDestroyView()
-        recyclerView.clearOnScrollListeners()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -75,8 +71,8 @@ class JobListFragment : Fragment(), JobListContract.View, ViewEventListener<Job>
         outState.putParcelable(KEY_LIST_STATE, listState)
     }
 
-    private fun setupViews(){
-        presenter = JobListPresenter(this)
+    open fun setupViews(){
+        presenter = providePresenter()
         items = ArrayList(60)
         recyclerView.layoutManager = LinearLayoutManager(context)
         adapter = SmartAdapter.items(items)
@@ -84,23 +80,9 @@ class JobListFragment : Fragment(), JobListContract.View, ViewEventListener<Job>
                 .map(Loading::class.java, LoadingView::class.java)
                 .listener(this)
                 .into(recyclerView)
-        scrollListener = object : EndlessRecyclerViewScrollListener(recyclerView.layoutManager){
-            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView) {
-                Timber.d("Load Page: %s", page)
-                presenter.loadMore(page)
-            }
-        }
-        recyclerView.addOnScrollListener(scrollListener)
     }
 
-    private fun setupInteractions(){
-        swipeRefreshLayout.setOnRefreshListener {
-            scrollListener.resetState()
-            presenter.refresh()
-
-        }
-
-    }
+    open fun setupInteractions(){}
 
     override fun showJobs(jobs: List<Job>) {
         val result = DiffUtil.calculateDiff(JobDiffUtilCallback(items, jobs))
@@ -143,7 +125,7 @@ class JobListFragment : Fragment(), JobListContract.View, ViewEventListener<Job>
 
     override fun onViewEvent(actionId: Int, item: Job?, position: Int, view: View?) {
         when(actionId){
-            JobView.ACTION_SELECTED->{
+            JobView.ACTION_SELECTED ->{
                 item?.let {
                     presenter.openJobDetail(item)
                 }
