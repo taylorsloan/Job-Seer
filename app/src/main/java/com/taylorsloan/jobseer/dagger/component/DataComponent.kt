@@ -2,10 +2,10 @@ package com.taylorsloan.jobseer.dagger.component
 
 import com.taylorsloan.jobseer.dagger.module.JobModule
 import com.taylorsloan.jobseer.dagger.scope.DataScope
-import com.taylorsloan.jobseer.domain.jobs.GetCoordinatesFromAddress
-import com.taylorsloan.jobseer.domain.jobs.GetJob
-import com.taylorsloan.jobseer.domain.jobs.GetJobs
-import com.taylorsloan.jobseer.domain.jobs.RefreshJobs
+import com.taylorsloan.jobseer.domain.job.GetCoordinatesFromAddress
+import com.taylorsloan.jobseer.domain.job.GetJob
+import com.taylorsloan.jobseer.domain.job.GetJobs
+import com.taylorsloan.jobseer.domain.job.RefreshJobs
 import dagger.Component
 
 /**

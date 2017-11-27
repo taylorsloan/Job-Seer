@@ -13,8 +13,8 @@ import timber.log.Timber
 class BrowseJobListFragment : AbstractJobListFragment() {
 
     companion object {
-        fun newInstance() : SavedJobListFragment {
-            return SavedJobListFragment()
+        fun newInstance(): BrowseJobListFragment {
+            return BrowseJobListFragment()
         }
     }
     private lateinit var scrollListener : EndlessRecyclerViewScrollListener

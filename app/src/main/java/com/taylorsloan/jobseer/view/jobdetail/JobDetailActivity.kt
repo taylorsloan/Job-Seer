@@ -17,7 +17,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.squareup.picasso.Picasso
 import com.taylorsloan.jobseer.R
-import com.taylorsloan.jobseer.data.model.Job
+import com.taylorsloan.jobseer.data.job.local.model.LocalJob
 import com.taylorsloan.jobseer.view.util.RoundedCornersTransformation
 
 import kotlinx.android.synthetic.main.activity_job_detail.*
@@ -120,7 +120,7 @@ class JobDetailActivity : AppCompatActivity(), JobDetailContract.View,
         jobId = savedInstanceState?.getString(KEY_JOB_ID) ?: ""
     }
 
-    override fun showJob(job: Job) {
+    override fun showJob(job: LocalJob) {
         textView_jobName.text = job.title
         textView_companyName.text = job.company
         textView_location.text = job.location

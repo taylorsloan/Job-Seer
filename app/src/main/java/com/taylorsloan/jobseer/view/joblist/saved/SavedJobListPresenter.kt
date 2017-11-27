@@ -1,7 +1,7 @@
 package com.taylorsloan.jobseer.view.joblist.browse
 
-import com.taylorsloan.jobseer.data.model.Job
-import com.taylorsloan.jobseer.domain.jobs.GetJobs
+import com.taylorsloan.jobseer.data.job.local.model.LocalJob
+import com.taylorsloan.jobseer.domain.job.GetJobs
 import com.taylorsloan.jobseer.view.joblist.common.JobListContract
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -66,7 +66,7 @@ class SavedJobListPresenter(var view: JobListContract.View?) : JobListContract.P
     override fun refresh() {
     }
 
-    override fun openJobDetail(job: Job) {
+    override fun openJobDetail(job: LocalJob) {
         view?.showJobDetail(job)
     }
 }

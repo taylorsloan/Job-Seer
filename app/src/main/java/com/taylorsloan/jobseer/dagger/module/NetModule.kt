@@ -1,8 +1,8 @@
 package com.taylorsloan.jobseer.dagger.module
 
 import com.taylorsloan.jobseer.dagger.scope.DataScope
-import com.taylorsloan.jobseer.data.service.GeocodingService
-import com.taylorsloan.jobseer.data.service.GitHubJobsService
+import com.taylorsloan.jobseer.data.coordinate.net.service.GeocodingService
+import com.taylorsloan.jobseer.data.job.net.service.GitHubJobsService
 import dagger.Module
 import dagger.Provides
 import io.reactivex.schedulers.Schedulers
@@ -32,7 +32,7 @@ class NetModule(baseUrl : String) {
 
     @Provides
     @DataScope
-    fun provideGeocodingService() : GeocodingService{
+    fun provideGeocodingService(): GeocodingService {
         return retrofit.create(GeocodingService::class.java)
     }
 }

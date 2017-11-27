@@ -1,6 +1,6 @@
 package com.taylorsloan.jobseer.view.jobdetail
 
-import com.taylorsloan.jobseer.data.model.Job
+import com.taylorsloan.jobseer.data.job.local.model.LocalJob
 import com.taylorsloan.jobseer.view.BasePresenter
 
 /**
@@ -9,7 +9,7 @@ import com.taylorsloan.jobseer.view.BasePresenter
 interface JobDetailContract {
 
     interface View{
-        fun showJob(job: Job)
+        fun showJob(job: LocalJob)
         fun showLocation(location : Pair<Double, Double>)
         fun showRemoteLocation()
         fun showCompanyWebPage(url : String)

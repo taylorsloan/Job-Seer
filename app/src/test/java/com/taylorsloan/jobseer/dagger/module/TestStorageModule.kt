@@ -1,10 +1,8 @@
 package com.taylorsloan.jobseer.dagger.module
 
 import com.taylorsloan.jobseer.dagger.scope.DataScope
-import com.taylorsloan.jobseer.data.model.MyObjectBox
 import dagger.Module
 import dagger.Provides
-import io.objectbox.BoxStore
 import java.io.File
 
 /**

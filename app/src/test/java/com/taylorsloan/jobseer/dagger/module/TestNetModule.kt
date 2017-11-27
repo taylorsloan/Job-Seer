@@ -1,11 +1,10 @@
 package com.taylorsloan.jobseer.dagger.module
 
 import com.taylorsloan.jobseer.dagger.scope.DataScope
-import com.taylorsloan.jobseer.data.service.GeocodingService
-import com.taylorsloan.jobseer.data.service.GitHubJobsService
+import com.taylorsloan.jobseer.data.coordinate.net.service.GeocodingService
+import com.taylorsloan.jobseer.data.job.net.service.GitHubJobsService
 import dagger.Module
 import dagger.Provides
-import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory

@@ -1,12 +1,11 @@
 package com.taylorsloan.jobseer.view.jobdetail
 
-import com.taylorsloan.jobseer.data.model.Job
-import com.taylorsloan.jobseer.domain.jobs.GetCoordinatesFromAddress
-import com.taylorsloan.jobseer.domain.jobs.GetJob
+import com.taylorsloan.jobseer.data.job.local.model.LocalJob
+import com.taylorsloan.jobseer.domain.job.GetCoordinatesFromAddress
+import com.taylorsloan.jobseer.domain.job.GetJob
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
 import timber.log.Timber
 
 /**
@@ -16,7 +15,7 @@ class JobDetailPresenter(private var view: JobDetailContract.View?, private val 
         JobDetailContract.Presenter {
 
     private var jobDisposable : Disposable? = null
-    private var job : Job? = null
+    private var job: LocalJob? = null
 
     override fun subscribe() {
         jobDisposable = GetJob(jobId).execute()

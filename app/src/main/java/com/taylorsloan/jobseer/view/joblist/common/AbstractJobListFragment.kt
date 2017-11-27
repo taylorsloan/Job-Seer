@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.taylorsloan.jobseer.R
-import com.taylorsloan.jobseer.data.model.Job
+import com.taylorsloan.jobseer.data.job.local.model.LocalJob
 import com.taylorsloan.jobseer.view.jobdetail.JobDetailActivity
 import com.taylorsloan.jobseer.view.joblist.LoadingView
 import com.taylorsloan.jobseer.view.joblist.model.Loading
@@ -23,7 +23,7 @@ import timber.log.Timber
 /**
  * Created by taylorsloan on 11/10/17.
  */
-abstract class AbstractJobListFragment : Fragment(), JobListContract.View, ViewEventListener<Job> {
+abstract class AbstractJobListFragment : Fragment(), JobListContract.View, ViewEventListener<LocalJob> {
 
     companion object {
         const val KEY_LIST_STATE = "recyclerViewState"
@@ -61,10 +61,6 @@ abstract class AbstractJobListFragment : Fragment(), JobListContract.View, ViewE
         presenter.subscribe()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         listState = (recyclerView.layoutManager as LinearLayoutManager).onSaveInstanceState()
@@ -76,7 +72,7 @@ abstract class AbstractJobListFragment : Fragment(), JobListContract.View, ViewE
         items = ArrayList(60)
         recyclerView.layoutManager = LinearLayoutManager(context)
         adapter = SmartAdapter.items(items)
-                .map(Job::class.java, JobView::class.java)
+                .map(LocalJob::class.java, JobView::class.java)
                 .map(Loading::class.java, LoadingView::class.java)
                 .listener(this)
                 .into(recyclerView)
@@ -84,7 +80,7 @@ abstract class AbstractJobListFragment : Fragment(), JobListContract.View, ViewE
 
     open fun setupInteractions(){}
 
-    override fun showJobs(jobs: List<Job>) {
+    override fun showJobs(jobs: List<LocalJob>) {
         val result = DiffUtil.calculateDiff(JobDiffUtilCallback(items, jobs))
         items.clear()
         items.addAll(jobs)
@@ -93,7 +89,7 @@ abstract class AbstractJobListFragment : Fragment(), JobListContract.View, ViewE
             recyclerView.layoutManager?.onRestoreInstanceState(listState)
             listState = null
         }
-        Timber.d("Job Count: %s", items.size)
+        Timber.d("LocalJob Count: %s", items.size)
     }
 
     override fun showLoading() {
@@ -113,7 +109,7 @@ abstract class AbstractJobListFragment : Fragment(), JobListContract.View, ViewE
         presenter.searchJobs(query)
     }
 
-    override fun showJobDetail(job: Job) {
+    override fun showJobDetail(job: LocalJob) {
         job.id?.let {
             JobDetailActivity.startActivity(context!!, it)
         }
@@ -123,7 +119,7 @@ abstract class AbstractJobListFragment : Fragment(), JobListContract.View, ViewE
         return savedInstanceState?.getParcelable(KEY_LIST_STATE)
     }
 
-    override fun onViewEvent(actionId: Int, item: Job?, position: Int, view: View?) {
+    override fun onViewEvent(actionId: Int, item: LocalJob?, position: Int, view: View?) {
         when(actionId){
             JobView.ACTION_SELECTED ->{
                 item?.let {
