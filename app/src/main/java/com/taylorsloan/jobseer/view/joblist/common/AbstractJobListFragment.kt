@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.taylorsloan.jobseer.R
-import com.taylorsloan.jobseer.data.job.local.model.LocalJob
+import com.taylorsloan.jobseer.domain.job.models.Job
 import com.taylorsloan.jobseer.view.jobdetail.JobDetailActivity
 import com.taylorsloan.jobseer.view.joblist.LoadingView
 import com.taylorsloan.jobseer.view.joblist.model.Loading
@@ -23,7 +23,7 @@ import timber.log.Timber
 /**
  * Created by taylorsloan on 11/10/17.
  */
-abstract class AbstractJobListFragment : Fragment(), JobListContract.View, ViewEventListener<LocalJob> {
+abstract class AbstractJobListFragment : Fragment(), JobListContract.View, ViewEventListener<Job> {
 
     companion object {
         const val KEY_LIST_STATE = "recyclerViewState"
@@ -72,7 +72,7 @@ abstract class AbstractJobListFragment : Fragment(), JobListContract.View, ViewE
         items = ArrayList(60)
         recyclerView.layoutManager = LinearLayoutManager(context)
         adapter = SmartAdapter.items(items)
-                .map(LocalJob::class.java, JobView::class.java)
+                .map(Job::class.java, JobView::class.java)
                 .map(Loading::class.java, LoadingView::class.java)
                 .listener(this)
                 .into(recyclerView)
@@ -80,7 +80,7 @@ abstract class AbstractJobListFragment : Fragment(), JobListContract.View, ViewE
 
     open fun setupInteractions(){}
 
-    override fun showJobs(jobs: List<LocalJob>) {
+    override fun showJobs(jobs: List<Job>) {
         val result = DiffUtil.calculateDiff(JobDiffUtilCallback(items, jobs))
         items.clear()
         items.addAll(jobs)
@@ -109,8 +109,8 @@ abstract class AbstractJobListFragment : Fragment(), JobListContract.View, ViewE
         presenter.searchJobs(query)
     }
 
-    override fun showJobDetail(job: LocalJob) {
-        job.id?.let {
+    override fun showJobDetail(job: Job) {
+        job.id.let {
             JobDetailActivity.startActivity(context!!, it)
         }
     }
@@ -119,7 +119,7 @@ abstract class AbstractJobListFragment : Fragment(), JobListContract.View, ViewE
         return savedInstanceState?.getParcelable(KEY_LIST_STATE)
     }
 
-    override fun onViewEvent(actionId: Int, item: LocalJob?, position: Int, view: View?) {
+    override fun onViewEvent(actionId: Int, item: Job?, position: Int, view: View?) {
         when(actionId){
             JobView.ACTION_SELECTED ->{
                 item?.let {

@@ -18,5 +18,7 @@ interface DataSource {
 
     fun job(id: String): Flowable<DataResult<Job>>
 
+    fun savedJobs(): Flowable<DataResult<List<Job>>>
+
     fun clearJobs()
 }

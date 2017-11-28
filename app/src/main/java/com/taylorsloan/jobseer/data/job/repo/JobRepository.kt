@@ -1,8 +1,8 @@
 package com.taylorsloan.jobseer.data.job.repo
 
 import com.taylorsloan.jobseer.data.common.model.DataResult
-import com.taylorsloan.jobseer.data.job.local.model.LocalJob
-import io.reactivex.Observable
+import com.taylorsloan.jobseer.domain.job.models.Job
+import io.reactivex.Flowable
 
 /**
  * Interface defining a job repository
@@ -14,13 +14,17 @@ interface JobRepository {
                 lat: Double? = null,
                 long: Double? = null,
                 fullTime: Boolean? = null,
-                saved: Boolean? = null): Observable<DataResult<List<LocalJob>>>
+                saved: Boolean? = null): Flowable<DataResult<List<Job>>>
+
+    fun getSavedJobs() : Flowable<DataResult<List<Job>>>
 
     fun getMoreJobs(page: Int = 0)
 
-    fun getJob(id: String): Observable<DataResult<LocalJob>>
+    fun getJob(id: String): Flowable<DataResult<Job>>
 
     fun saveJob(id: String)
+
+    fun unsaveJob(id: String)
 
     fun clearJobs()
 }

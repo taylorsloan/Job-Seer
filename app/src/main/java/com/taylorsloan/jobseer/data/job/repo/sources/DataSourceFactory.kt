@@ -1,26 +1,33 @@
 package com.taylorsloan.jobseer.data.job.repo.sources
 
 import com.taylorsloan.jobseer.data.DataModule
+import com.taylorsloan.jobseer.data.DataModuleImpl
+import com.taylorsloan.jobseer.data.common.AppDatabase
 import com.taylorsloan.jobseer.data.common.model.DataResult
-import com.taylorsloan.jobseer.data.job.local.model.LocalJob
-import io.reactivex.Observable
+import com.taylorsloan.jobseer.data.job.util.JobMapper
+import com.taylorsloan.jobseer.domain.job.models.Job
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import io.reactivex.disposables.Disposable
-import io.reactivex.observers.DisposableObserver
 import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
+ * Data source wrapper for jobs being returned from local or online sources
  * Created by taylorsloan on 10/28/17.
  */
-class DataSourceFactory(dataModule: DataModule, val jobPersistor: JobPersistor) : DataSource {
+class DataSourceFactory(dataModule: DataModule) : DataSource {
+
+    @Inject
+    lateinit var appDb : AppDatabase
 
     private val localDataStore : DataSource = LocalDataSource(dataModule)
     private val cloudDataStore : DataSource = CloudDataSource(dataModule)
 
     private var localJobsDisposable : Disposable? = null
-    private var localJobDisposable : Disposable? = null
 
-    private val subject: BehaviorSubject<DataResult<List<LocalJob>>> = BehaviorSubject.create()
+    private val subject: BehaviorSubject<DataResult<List<Job>>> = BehaviorSubject.create()
 
     private var previousSearchParams : SearchParams? = null
 
@@ -32,7 +39,7 @@ class DataSourceFactory(dataModule: DataModule, val jobPersistor: JobPersistor) 
                                     val saved: Boolean? = null)
 
     init {
-        // jobPersistor.init()
+        DataModuleImpl.storageComponent().inject(this)
     }
 
     override fun jobs(description: String?,
@@ -41,27 +48,19 @@ class DataSourceFactory(dataModule: DataModule, val jobPersistor: JobPersistor) 
                       long: Double?,
                       fullTime: Boolean?,
                       page: Int,
-                      saved: Boolean?): Observable<DataResult<List<LocalJob>>> {
+                      saved: Boolean?): Flowable<DataResult<List<Job>>> {
         val searchParams = SearchParams(description, location, lat, long, fullTime, saved)
         if (previousSearchParams?.hashCode() != searchParams.hashCode()){
             localJobsDisposable?.dispose()
             localJobsDisposable = localDataStore.jobs(description, location, lat, long, fullTime, page, saved)
-                    .subscribeWith(object : DisposableObserver<DataResult<List<LocalJob>>>() {
-                        override fun onError(e: Throwable) {
-                            subject.onError(e)
-                        }
-
-                        override fun onNext(t: DataResult<List<LocalJob>>) {
-                            subject.onNext(t)
-                        }
-
-                        override fun onComplete() {
-                            subject.onComplete()
-                        }
-                    })
+                    .subscribe(
+                            { subject.onNext(it) },
+                            { subject.onError(it) },
+                            { subject.onComplete() }
+                    )
         }
         previousSearchParams = searchParams
-        return subject
+        return subject.toFlowable(BackpressureStrategy.BUFFER)
     }
 
     fun getMoreJobs(page: Int) {
@@ -71,7 +70,7 @@ class DataSourceFactory(dataModule: DataModule, val jobPersistor: JobPersistor) 
                             {
                                 Timber.d("Received Jobs: %s", it.data?.size.toString())
                                 it.data?.let {
-                                    jobPersistor.persist(it)
+                                    appDb.jobDao().insertJobs(JobMapper.mapDomainListToLocal(it))
                                 }
                             },
                             {
@@ -82,12 +81,12 @@ class DataSourceFactory(dataModule: DataModule, val jobPersistor: JobPersistor) 
         }
     }
 
-    override fun job(id: String): Observable<DataResult<LocalJob>> {
+    override fun job(id: String): Flowable<DataResult<Job>> {
         cloudDataStore.job(id)
                 .subscribe(
                         {
                             it.data?.let {
-                                jobPersistor.persist(arrayListOf(it))
+                                appDb.jobDao().insertJob(JobMapper.mapToLocal(it))
                             }
                         },
                         {
@@ -96,6 +95,10 @@ class DataSourceFactory(dataModule: DataModule, val jobPersistor: JobPersistor) 
                         }
                 )
         return localDataStore.job(id)
+    }
+
+    override fun savedJobs(): Flowable<DataResult<List<Job>>> {
+        return localDataStore.savedJobs()
     }
 
     override fun clearJobs() {

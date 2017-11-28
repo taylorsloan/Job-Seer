@@ -5,12 +5,12 @@ import com.taylorsloan.jobseer.data.job.net.model.NetJob
 import com.taylorsloan.jobseer.domain.job.models.Job
 
 /**
- * Adapter used to map objects received from online sources to DB sources and vice-versa
+ * Adapter used to mapToNet objects received from online sources to DB sources and vice-versa
  * Created by taylorsloan on 11/26/17.
  */
 object JobMapper {
 
-    fun map(job: LocalJob): NetJob {
+    fun mapToNet(job: LocalJob): NetJob {
         return NetJob(job.id,
                 job.created_at,
                 job.title, job.location,
@@ -22,7 +22,43 @@ object JobMapper {
                 job.url)
     }
 
-    fun toPlainObj(job: LocalJob): Job {
+    fun mapToNet(job: Job): NetJob {
+        return NetJob(job.id,
+                job.created_at,
+                job.title, job.location,
+                job.type, job.description,
+                job.how_to_apply,
+                job.company,
+                job.company_url,
+                job.company_logo,
+                job.url)
+    }
+
+    fun mapToLocal(job: Job): LocalJob {
+        return LocalJob(job.id,
+                job.created_at,
+                job.title, job.location,
+                job.type, job.description,
+                job.how_to_apply,
+                job.company,
+                job.company_url,
+                job.company_logo,
+                job.url)
+    }
+
+    fun mapToLocal(job: NetJob): LocalJob {
+        return LocalJob(job.id,
+                job.created_at,
+                job.title, job.location,
+                job.type, job.description,
+                job.how_to_apply,
+                job.company,
+                job.company_url,
+                job.company_logo,
+                job.url)
+    }
+
+    fun mapToDomain(job: LocalJob): Job {
         return Job(job.id,
                 job.created_at,
                 job.title, job.location,
@@ -35,28 +71,7 @@ object JobMapper {
                 job.saved)
     }
 
-    fun convertLocalToPlainObj(jobs: List<LocalJob>): List<Job> {
-        val convertedJobs = ArrayList<Job>(jobs.size)
-        jobs.forEach {
-            val job = toPlainObj(it)
-            convertedJobs.add(job)
-        }
-        return convertedJobs
-    }
-
-    fun map(job: NetJob): LocalJob {
-        return LocalJob(job.id,
-                job.created_at,
-                job.title, job.location,
-                job.type, job.description,
-                job.how_to_apply,
-                job.company,
-                job.company_url,
-                job.company_logo,
-                job.url)
-    }
-
-    fun toPlainObj(job: NetJob): Job {
+    fun mapToDomain(job: NetJob): Job {
         return Job(job.id,
                 job.created_at,
                 job.title, job.location,
@@ -68,10 +83,28 @@ object JobMapper {
                 job.url)
     }
 
-    fun convertNetToPlainObj(jobs: List<NetJob>): List<Job> {
+    fun mapLocalListToDomain(jobs: List<LocalJob>): List<Job> {
         val convertedJobs = ArrayList<Job>(jobs.size)
         jobs.forEach {
-            val job = toPlainObj(it)
+            val job = mapToDomain(it)
+            convertedJobs.add(job)
+        }
+        return convertedJobs
+    }
+
+    fun mapNetListToDomain(jobs: List<NetJob>): List<Job> {
+        val convertedJobs = ArrayList<Job>(jobs.size)
+        jobs.forEach {
+            val job = mapToDomain(it)
+            convertedJobs.add(job)
+        }
+        return convertedJobs
+    }
+
+    fun mapDomainListToLocal(jobs: List<Job>): List<LocalJob> {
+        val convertedJobs = ArrayList<LocalJob>(jobs.size)
+        jobs.forEach {
+            val job = mapToLocal(it)
             convertedJobs.add(job)
         }
         return convertedJobs

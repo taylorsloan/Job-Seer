@@ -2,6 +2,8 @@ package com.taylorsloan.jobseer.dagger.component
 
 import com.taylorsloan.jobseer.dagger.module.StorageModule
 import com.taylorsloan.jobseer.dagger.scope.DataScope
+import com.taylorsloan.jobseer.data.job.repo.JobRepositoryImpl
+import com.taylorsloan.jobseer.data.job.repo.sources.DataSourceFactory
 import com.taylorsloan.jobseer.data.job.repo.sources.LocalDataSource
 import dagger.Component
 
@@ -12,4 +14,6 @@ import dagger.Component
 @DataScope
 interface StorageComponent {
     fun inject(localDataSource: LocalDataSource)
+    fun inject(dataSourceFactory: DataSourceFactory)
+    fun inject(jobRepositoryImpl: JobRepositoryImpl)
 }

@@ -4,7 +4,7 @@ package com.taylorsloan.jobseer.data.job.net.model
  * Model that describes a job received from online sources
  * Created by taylorsloan on 10/28/17.
  */
-data class NetJob(var id: String?,
+data class NetJob(var id: String,
                   var created_at: String?,
                   var title: String?,
                   var location: String?,

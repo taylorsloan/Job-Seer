@@ -83,7 +83,7 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
 
     implementation "android.arch.persistence.room:runtime:$roomVersion"
-    annotationProcessor "android.arch.persistence.room:compiler:$roomVersion"
+    kapt "android.arch.persistence.room:compiler:$roomVersion"
     testImplementation "android.arch.persistence.room:testing:$roomVersion"
     implementation "android.arch.persistence.room:rxjava2:$roomVersion"
     implementation 'com.google.android.gms:play-services-maps:11.6.0'

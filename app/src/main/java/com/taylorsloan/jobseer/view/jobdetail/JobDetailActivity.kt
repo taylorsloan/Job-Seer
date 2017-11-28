@@ -17,9 +17,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.squareup.picasso.Picasso
 import com.taylorsloan.jobseer.R
-import com.taylorsloan.jobseer.data.job.local.model.LocalJob
+import com.taylorsloan.jobseer.domain.job.models.Job
 import com.taylorsloan.jobseer.view.util.RoundedCornersTransformation
-
 import kotlinx.android.synthetic.main.activity_job_detail.*
 
 class JobDetailActivity : AppCompatActivity(), JobDetailContract.View,
@@ -69,7 +68,7 @@ class JobDetailActivity : AppCompatActivity(), JobDetailContract.View,
         appBarLayout.addOnOffsetChangedListener(this)
         maxScrollSize = appBarLayout.totalScrollRange
         mapView.getMapAsync { initMap(it) }
-        view_mapBlock.setOnTouchListener { _, _ -> true } // Ignore All Touch Events on map view
+        view_mapBlock.setOnTouchListener { _, _ -> true } // Ignore All Touch Events on mapToNet view
     }
 
     private fun setupInteractions(){
@@ -88,6 +87,11 @@ class JobDetailActivity : AppCompatActivity(), JobDetailContract.View,
         return when(item?.itemId){
             R.id.action_save ->{
                 item.isChecked = true
+                if (isSaved) {
+                    presenter.unsaveJob()
+                } else {
+                    presenter.saveJob()
+                }
                 true
             }
 
@@ -120,7 +124,7 @@ class JobDetailActivity : AppCompatActivity(), JobDetailContract.View,
         jobId = savedInstanceState?.getString(KEY_JOB_ID) ?: ""
     }
 
-    override fun showJob(job: LocalJob) {
+    override fun showJob(job: Job) {
         textView_jobName.text = job.title
         textView_companyName.text = job.company
         textView_location.text = job.location
@@ -130,6 +134,11 @@ class JobDetailActivity : AppCompatActivity(), JobDetailContract.View,
                 .centerInside()
                 .into(imageView_companyIcon)
         html_text.setHtml(job.description ?: "")
+        if (job.saved == true) {
+            showSaved()
+        } else {
+            showUnsaved()
+        }
     }
 
     override fun onStart() {
@@ -191,6 +200,16 @@ class JobDetailActivity : AppCompatActivity(), JobDetailContract.View,
         intent.type = "text/plain"
         startActivity(Intent.createChooser(intent, resources
                 .getText(R.string.activity_job_detail_share)))
+    }
+
+    override fun showSaved() {
+        isSaved = true
+        Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showUnsaved() {
+        isSaved = false
+        Toast.makeText(this, "Unsaved", Toast.LENGTH_SHORT).show()
     }
 
     override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {

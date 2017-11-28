@@ -29,16 +29,20 @@ class CloudDataSource(dataModule: DataModule) : DataSource {
                       page: Int,
                       saved: Boolean?): Flowable<DataResult<List<Job>>> {
         return githubService.getJobs(description, location, lat, long, fullTime, page)
-                .map { JobMapper.convertNetToPlainObj(it) }
+                .map { JobMapper.mapNetListToDomain(it) }
                 .map { DataResult(data = it) }
                 .toFlowable()
     }
 
     override fun job(id: String): Flowable<DataResult<Job>> {
         return githubService.getJob(id)
-                .map { JobMapper.toPlainObj(it) }
+                .map { JobMapper.mapToDomain(it) }
                 .map { DataResult(data = it) }
                 .toFlowable()
+    }
+
+    override fun savedJobs(): Flowable<DataResult<List<Job>>> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun clearJobs() {

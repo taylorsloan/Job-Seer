@@ -1,6 +1,6 @@
 package com.taylorsloan.jobseer.view.joblist.common
 
-import com.taylorsloan.jobseer.data.job.local.model.LocalJob
+import com.taylorsloan.jobseer.domain.job.models.Job
 import com.taylorsloan.jobseer.view.BasePresenter
 
 /**
@@ -9,18 +9,18 @@ import com.taylorsloan.jobseer.view.BasePresenter
 interface JobListContract {
 
     interface View {
-        fun showJobs(jobs: List<LocalJob>)
+        fun showJobs(jobs: List<Job>)
         fun showLoading()
         fun hideLoading()
         fun hideRefreshing()
-        fun showJobDetail(job: LocalJob)
+        fun showJobDetail(job: Job)
         fun searchJobs(query: String)
     }
 
     interface Presenter : BasePresenter{
         fun loadMore(page: Int)
         fun refresh()
-        fun openJobDetail(job: LocalJob)
+        fun openJobDetail(job: Job)
         fun searchJobs(query: String)
     }
 }

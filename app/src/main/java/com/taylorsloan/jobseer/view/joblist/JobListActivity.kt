@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.taylorsloan.jobseer.R
 import com.taylorsloan.jobseer.data.job.local.model.LocalJob
+import com.taylorsloan.jobseer.domain.job.models.Job
 import com.taylorsloan.jobseer.view.jobdetail.JobDetailActivity
 import com.taylorsloan.jobseer.view.joblist.common.*
 import com.taylorsloan.jobseer.view.joblist.model.Loading
@@ -19,7 +20,7 @@ import kotlinx.android.synthetic.main.activity_job_list.*
 import timber.log.Timber
 
 
-class JobListActivity : AppCompatActivity(), JobListContract.View, ViewEventListener<LocalJob> {
+class JobListActivity : AppCompatActivity(), JobListContract.View, ViewEventListener<Job> {
 
     companion object {
         const val KEY_LIST_STATE = "recyclerViewState"
@@ -44,7 +45,7 @@ class JobListActivity : AppCompatActivity(), JobListContract.View, ViewEventList
         setupInteractions()
     }
 
-    override fun showJobs(jobs: List<LocalJob>) {
+    override fun showJobs(jobs: List<Job>) {
         val result = DiffUtil.calculateDiff(JobDiffUtilCallback(items, jobs))
         items.clear()
         items.addAll(jobs)
@@ -115,7 +116,7 @@ class JobListActivity : AppCompatActivity(), JobListContract.View, ViewEventList
         return lm.findViewByPosition(lastVisiblePosition)
     }
 
-    override fun showJobDetail(job: LocalJob) {
+    override fun showJobDetail(job: Job) {
         job.id?.let {
             JobDetailActivity.startActivity(this, it)
         }
@@ -140,7 +141,7 @@ class JobListActivity : AppCompatActivity(), JobListContract.View, ViewEventList
         return savedInstanceState?.getParcelable(KEY_LIST_STATE)
     }
 
-    override fun onViewEvent(actionId: Int, item: LocalJob?, position: Int, view: View?) {
+    override fun onViewEvent(actionId: Int, item: Job?, position: Int, view: View?) {
         when(actionId){
             JobView.ACTION_SELECTED->{
                 item?.let {

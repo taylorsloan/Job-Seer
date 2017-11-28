@@ -9,7 +9,7 @@ import com.taylorsloan.jobseer.data.job.local.service.JobDao
  * Database using Room
  * Created by taylorsloan on 11/26/17.
  */
-@Database(entities = arrayOf(LocalJob::class), version = 1)
+@Database(entities = arrayOf(LocalJob::class), version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun jobDao(): JobDao
 }

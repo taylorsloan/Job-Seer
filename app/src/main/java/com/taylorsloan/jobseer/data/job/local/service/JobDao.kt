@@ -17,9 +17,21 @@ interface JobDao {
     /**
      * Insert Jobs into the local database
      */
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertJobs(vararg jobs: LocalJob)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertJobs(jobs: List<LocalJob>)
 
-    @Query("SELECT * FROM jobs")
-    fun loadAllJobs(): Flowable<List<LocalJob>>
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertJob(job: LocalJob)
+
+    @Query("SELECT * FROM jobs WHERE saved = :saved ORDER BY date_added ASC")
+    fun loadJobs(saved: Int = 0) : Flowable<List<LocalJob>>
+
+    @Query("SELECT * FROM jobs WHERE id = :id")
+    fun loadJob(id: String) : Flowable<LocalJob>
+
+    @Query("UPDATE jobs SET saved = :saved WHERE id = :id")
+    fun saveJob(saved: Int = 1, id: String) : Int
+
+    @Query("DELETE FROM jobs WHERE saved = 0")
+    fun clearJobs()
 }

@@ -4,6 +4,7 @@ import android.app.Application
 import android.arch.persistence.room.Room
 import com.taylorsloan.jobseer.dagger.scope.DataScope
 import com.taylorsloan.jobseer.data.common.AppDatabase
+import com.taylorsloan.jobseer.data.job.local.service.JobDao
 import dagger.Module
 import dagger.Provides
 
@@ -18,6 +19,14 @@ class StorageModule {
     @DataScope
     fun provideDatabase(application: Application): AppDatabase {
         return Room.databaseBuilder(application,
-                AppDatabase::class.java, "local.db").build()
+                AppDatabase::class.java, "local.db")
+                .allowMainThreadQueries()
+                .build()
+    }
+
+    @Provides
+    @DataScope
+    fun provideJobDao(database: AppDatabase) : JobDao {
+        return database.jobDao()
     }
 }

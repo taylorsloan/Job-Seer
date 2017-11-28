@@ -1,8 +1,8 @@
 package com.taylorsloan.jobseer.view.joblist.common
 
-import com.taylorsloan.jobseer.data.job.local.model.LocalJob
 import com.taylorsloan.jobseer.domain.job.GetJobs
 import com.taylorsloan.jobseer.domain.job.RefreshJobs
+import com.taylorsloan.jobseer.domain.job.models.Job
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -22,7 +22,7 @@ class JobListPresenter(var view: JobListContract.View?) : JobListContract.Presen
     }
 
     private fun loadData(){
-        getJobs.execute()
+        disposable.add(getJobs.execute()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext{
@@ -39,10 +39,7 @@ class JobListPresenter(var view: JobListContract.View?) : JobListContract.Presen
                         {
                             Timber.e(it, "Error Getting Jobs")
                         },
-                        {},
-                        {
-                            disposable.add(it)
-                        }
+                        {})
                 )
         getJobs.getMore()
     }
@@ -67,7 +64,7 @@ class JobListPresenter(var view: JobListContract.View?) : JobListContract.Presen
         RefreshJobs().execute()
     }
 
-    override fun openJobDetail(job: LocalJob) {
+    override fun openJobDetail(job: Job) {
         view?.showJobDetail(job)
     }
 }

@@ -11,5 +11,5 @@ import dagger.Component
 @DataScope
 interface NetComponent {
     fun inject(cloudDataSource: com.taylorsloan.jobseer.data.job.repo.sources.CloudDataSource)
-    fun inject(cloudDataSource: com.taylorsloan.jobseer.data.coordinates.repo.sources.CloudDataSource)
+    fun inject(cloudDataSource: com.taylorsloan.jobseer.data.coordinate.repo.sources.CloudDataSource)
 }

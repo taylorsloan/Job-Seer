@@ -1,7 +1,7 @@
 package com.taylorsloan.jobseer.view.joblist.browse
 
-import com.taylorsloan.jobseer.data.job.local.model.LocalJob
-import com.taylorsloan.jobseer.domain.job.GetJobs
+import com.taylorsloan.jobseer.domain.job.GetSavedJobs
+import com.taylorsloan.jobseer.domain.job.models.Job
 import com.taylorsloan.jobseer.view.joblist.common.JobListContract
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -15,10 +15,10 @@ class SavedJobListPresenter(var view: JobListContract.View?) : JobListContract.P
 
     private val disposable = CompositeDisposable()
 
-    private val getJobs = GetJobs()
+    private val savedJobs = GetSavedJobs()
 
     init {
-        getJobs.saved = true
+
     }
 
     override fun subscribe() {
@@ -26,7 +26,7 @@ class SavedJobListPresenter(var view: JobListContract.View?) : JobListContract.P
     }
 
     private fun loadData(){
-        getJobs.execute()
+        disposable.add(savedJobs.execute()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext{
@@ -43,10 +43,7 @@ class SavedJobListPresenter(var view: JobListContract.View?) : JobListContract.P
                         {
                             Timber.e(it, "Error Getting Jobs")
                         },
-                        {},
-                        {
-                            disposable.add(it)
-                        }
+                        {})
                 )
     }
 
@@ -59,14 +56,13 @@ class SavedJobListPresenter(var view: JobListContract.View?) : JobListContract.P
 
     override fun searchJobs(query: String) {
         disposable.clear()
-        getJobs.description = query
         loadData()
     }
 
     override fun refresh() {
     }
 
-    override fun openJobDetail(job: LocalJob) {
+    override fun openJobDetail(job: Job) {
         view?.showJobDetail(job)
     }
 }

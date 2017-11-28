@@ -1,8 +1,10 @@
 package com.taylorsloan.jobseer.view.jobdetail
 
-import com.taylorsloan.jobseer.data.job.local.model.LocalJob
 import com.taylorsloan.jobseer.domain.job.GetCoordinatesFromAddress
 import com.taylorsloan.jobseer.domain.job.GetJob
+import com.taylorsloan.jobseer.domain.job.SaveJob
+import com.taylorsloan.jobseer.domain.job.UnsaveJob
+import com.taylorsloan.jobseer.domain.job.models.Job
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import org.jsoup.Jsoup
@@ -15,7 +17,7 @@ class JobDetailPresenter(private var view: JobDetailContract.View?, private val 
         JobDetailContract.Presenter {
 
     private var jobDisposable : Disposable? = null
-    private var job: LocalJob? = null
+    private var job: Job? = null
 
     override fun subscribe() {
         jobDisposable = GetJob(jobId).execute()
@@ -47,6 +49,18 @@ class JobDetailPresenter(private var view: JobDetailContract.View?, private val 
 
     private fun isRemoteJob(location: String) : Boolean{
         return location.contains("remote", true)
+    }
+
+    override fun saveJob() {
+        val sj = SaveJob(jobId)
+        sj.execute()
+        view?.showSaved()
+    }
+
+    override fun unsaveJob() {
+        val usj = UnsaveJob(jobId)
+        usj.execute()
+        view?.showUnsaved()
     }
 
     override fun openCompanyWebPage() {

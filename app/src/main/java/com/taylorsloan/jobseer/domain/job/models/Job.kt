@@ -3,7 +3,7 @@ package com.taylorsloan.jobseer.domain.job.models
 /**
  * Created by taylorsloan on 11/26/17.
  */
-data class Job(var id: String?,
+data class Job(var id: String,
                var created_at: String?,
                var title: String?,
                var location: String?,

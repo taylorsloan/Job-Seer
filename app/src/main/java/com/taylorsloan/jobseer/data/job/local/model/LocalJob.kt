@@ -8,7 +8,7 @@ import android.arch.persistence.room.PrimaryKey
  * Created by taylorsloan on 10/28/17.
  */
 @Entity(tableName = "jobs")
-data class LocalJob(@PrimaryKey(autoGenerate = false) var id: String?,
+data class LocalJob(@PrimaryKey(autoGenerate = false) var id: String,
                     var created_at: String?,
                     var title: String?,
                     var location: String?,
@@ -19,4 +19,5 @@ data class LocalJob(@PrimaryKey(autoGenerate = false) var id: String?,
                     var company_url: String?,
                     var company_logo: String?,
                     var url: String?,
-                    var saved: Boolean? = false)
+                    var saved: Boolean? = false,
+                    val date_added: Long = System.currentTimeMillis())
