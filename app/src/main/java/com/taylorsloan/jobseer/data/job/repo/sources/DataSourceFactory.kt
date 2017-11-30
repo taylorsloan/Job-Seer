@@ -66,13 +66,14 @@ class DataSourceFactory(dataModule: DataModule) : DataSource {
     fun getMoreJobs(page: Int) {
         previousSearchParams?.let {
             cloudDataStore.jobs(it.description, it.location, it.lat, it.long, it.fullTime, page)
+                    .doOnNext{
+                        it.data?.let {
+                            appDb.jobDao().insertJobs(JobMapper.mapDomainListToLocal(it))
+                        }
+                    }
                     .subscribe(
                             {
-                                Timber.d("Received Jobs: %s", it.data?.size.toString())
-                                it.data?.let {
-                                    appDb.jobDao().insertJobs(JobMapper.mapDomainListToLocal(it))
-                                }
-                            },
+                                Timber.d("Received Jobs: %s", it.data?.size.toString())                      },
                             {
                                 Timber.e(it)
                                 subject.onNext(DataResult(error = it))
