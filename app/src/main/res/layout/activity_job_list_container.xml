@@ -5,14 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.taylorsloan.jobseer.view.joblist.JobListContainerActivity">
+    tools:context="com.taylorsloan.jobseer.view.joblist.J0bListContainerActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:elevation="4dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,7 +26,7 @@
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
             android:popupTheme="@style/AppTheme.AppBarOverlay"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"/>
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
 
         <FrameLayout
             android:id="@+id/frameLayout_bar"
@@ -32,11 +34,32 @@
             android:layout_height="64dp"
             android:background="@color/colorPrimary">
 
-            <com.lapism.searchview.SearchView
-                android:id="@+id/searchView"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"/>
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:background="@drawable/rounded_rectangle"
+                android:elevation="2dp"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/imageButton_filter"
+                    android:layout_width="48dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:tint="@color/darkerer_gray"
+                    app:srcCompat="@drawable/ic_filter_list" />
+
+                <EditText
+                    android:id="@+id/editText_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:ems="10"
+                    android:hint="@string/search_hint"
+                    android:inputType="textPersonName" />
+            </LinearLayout>
         </FrameLayout>
 
     </LinearLayout>

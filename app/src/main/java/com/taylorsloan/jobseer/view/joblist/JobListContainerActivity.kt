@@ -36,40 +36,46 @@ class JobListContainerActivity : AppCompatActivity(), SearchView.OnQueryTextList
 
     private fun setupViews() {
         tabLayout.setupWithViewPager(viewPager)
-//        initJobListFragment()
-        items.add(Pair("Browse", BrowseJobListFragment.newInstance()))
-        items.add(Pair("Saved", SavedJobListFragment.newInstance()))
+        initBrowseJobsFragment()
+        initSavedJobFragment()
         adapter = MyAdapter(supportFragmentManager, items)
         viewPager.adapter = adapter
     }
 
     private fun setupInteractions() {
-        searchView.setOnQueryTextListener(this)
+//        searchView.setOnQueryTextListener(this)
     }
 
-    private fun initJobListFragment() {
+    private fun tearDownInteractions() {
+//        searchView.setOnQueryTextListener(null)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        tearDownInteractions()
+    }
+
+    private fun initBrowseJobsFragment() {
         var fragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG_GITHUB_JOB)
         if (fragment == null) {
             fragment = BrowseJobListFragment.newInstance()
         }
         jobListView = fragment as? JobListContract.View
-        /*supportFragmentManager.beginTransaction()
-                .replace(R.id.frameLayout_container, fragment, FRAGMENT_TAG_GITHUB_JOB)
-                .commit()*/
+        items.add(Pair("Browse", fragment))
     }
 
     private fun initSavedJobFragment() {
         var fragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG_SAVED)
         if (fragment == null) {
-            fragment = BrowseJobListFragment.newInstance()
+            fragment = SavedJobListFragment.newInstance()
         }
-
+        items.add(Pair("Saved", fragment))
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         if (!query.isNullOrEmpty()){
             jobListView?.searchJobs(query!!)
-            searchView.close(false)
+
         }
         return true
     }

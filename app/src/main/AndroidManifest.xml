@@ -22,19 +22,17 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".view.joblist.JobListActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity
             android:name=".view.jobdetail.JobDetailActivity"
             android:label="@string/title_activity_job_detail"
-            android:parentActivityName=".view.joblist.JobListActivity"
+            android:parentActivityName=".view.joblist.JobListContainerActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.taylorsloan.jobseer.view.joblist.JobListActivity"/>
+                android:value="com.taylorsloan.jobseer.view.joblist.JobListContainerActivity"/>
         </activity>
         <activity
             android:name=".view.joblist.JobListContainerActivity"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

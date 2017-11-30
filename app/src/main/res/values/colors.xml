@@ -9,4 +9,5 @@
     <color name="colorPrimaryText">#fafafa</color>
     <color name="colorSecondaryText">#fafafa</color>
     <color name="light_gray">#cfd8dc</color>
+    <color name="darkerer_gray">#616161</color>
 </resources>

@@ -40,6 +40,8 @@ class JobDetailActivity : AppCompatActivity(), JobDetailContract.View,
     private lateinit var jobId : String
     private lateinit var presenter : JobDetailContract.Presenter
 
+    private var saveMenuItem : MenuItem? = null
+
     private var maxScrollSize = 0
     private var isAvatarShown = true
 
@@ -80,13 +82,18 @@ class JobDetailActivity : AppCompatActivity(), JobDetailContract.View,
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_job_detail, menu)
+        saveMenuItem = menu?.findItem(R.id.action_save)
+        if (isSaved) {
+            showSaved()
+        } else {
+            showUnsaved()
+        }
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when(item?.itemId){
             R.id.action_save ->{
-                item.isChecked = true
                 if (isSaved) {
                     presenter.unsaveJob()
                 } else {
@@ -204,12 +211,12 @@ class JobDetailActivity : AppCompatActivity(), JobDetailContract.View,
 
     override fun showSaved() {
         isSaved = true
-        Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show()
+        saveMenuItem?.setIcon(R.drawable.ic_star)
     }
 
     override fun showUnsaved() {
         isSaved = false
-        Toast.makeText(this, "Unsaved", Toast.LENGTH_SHORT).show()
+        saveMenuItem?.setIcon(R.drawable.ic_star_border)
     }
 
     override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {

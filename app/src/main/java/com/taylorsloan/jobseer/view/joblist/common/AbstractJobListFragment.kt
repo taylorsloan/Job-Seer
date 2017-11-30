@@ -17,6 +17,9 @@ import com.taylorsloan.jobseer.view.joblist.model.Loading
 import io.nlopez.smartadapters.SmartAdapter
 import io.nlopez.smartadapters.adapters.RecyclerMultiAdapter
 import io.nlopez.smartadapters.utils.ViewEventListener
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_job_list.*
 import timber.log.Timber
 
@@ -81,15 +84,23 @@ abstract class AbstractJobListFragment : Fragment(), JobListContract.View, ViewE
     open fun setupInteractions(){}
 
     override fun showJobs(jobs: List<Job>) {
-        val result = DiffUtil.calculateDiff(JobDiffUtilCallback(items, jobs))
-        items.clear()
-        items.addAll(jobs)
-        result.dispatchUpdatesTo(adapter)
-        listState?.let {
-            recyclerView.layoutManager?.onRestoreInstanceState(listState)
-            listState = null
-        }
-        Timber.d("LocalJob Count: %s", items.size)
+        Single.just(Pair(items, jobs))
+                .subscribeOn(Schedulers.computation())
+                .map { DiffUtil.calculateDiff(JobDiffUtilCallback(it.first, it.second)) }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        {
+                            items.clear()
+                            items.addAll(jobs)
+                            it.dispatchUpdatesTo(adapter)
+                            listState?.let {
+                                recyclerView.layoutManager?.onRestoreInstanceState(listState)
+                                listState = null
+                            }
+                            Timber.d("LocalJob Count: %s", items.size)
+                        },
+                        {}
+                )
     }
 
     override fun showLoading() {
