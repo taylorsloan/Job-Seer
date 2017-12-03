@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/JobSeer.iml" filepath="$PROJECT_DIR$/JobSeer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Job-Seer.iml" filepath="$PROJECT_DIR$/Job-Seer.iml" />
+      <module fileurl="file://C:\Users\taylo\StudioProjects\Job-Seer\JobSeer.iml" filepath="C:\Users\taylo\StudioProjects\Job-Seer\JobSeer.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

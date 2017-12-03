@@ -23,8 +23,16 @@ interface JobDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertJob(job: LocalJob)
 
-    @Query("SELECT * FROM jobs WHERE saved = :saved ORDER BY date_added ASC")
-    fun loadJobs(saved: Int = 0) : Flowable<List<LocalJob>>
+    @Query("SELECT * FROM jobs " +
+            "WHERE description LIKE :description " +
+            "AND saved = :saved " +
+            "AND location LIKE :location " +
+            "AND type = :type " +
+            "ORDER BY date_added ASC")
+    fun loadJobs(description: String = "%%",
+                 saved: Int = 0,
+                 location: String = "%%",
+                 type: String = "Full Time") : Flowable<List<LocalJob>>
 
     @Query("SELECT * FROM jobs WHERE id = :id")
     fun loadJob(id: String) : Flowable<LocalJob>

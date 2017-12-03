@@ -11,7 +11,7 @@ import timber.log.Timber
 /**
  * Created by taylo on 10/29/2017.
  */
-class JobListPresenter(var view: JobListContract.View?) : JobListContract.Presenter {
+open class JobListPresenter(private var view: JobListContract.View?) : JobListContract.Presenter {
 
     private val disposable = CompositeDisposable()
 
@@ -27,7 +27,7 @@ class JobListPresenter(var view: JobListContract.View?) : JobListContract.Presen
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext{
                     it.error?.let {
-
+                        // TODO Error Handling
                     }
                 }
                 .subscribe(
@@ -38,6 +38,7 @@ class JobListPresenter(var view: JobListContract.View?) : JobListContract.Presen
                         },
                         {
                             Timber.e(it, "Error Getting Jobs")
+                            // TODO Error Handling
                         },
                         {})
                 )
@@ -54,9 +55,11 @@ class JobListPresenter(var view: JobListContract.View?) : JobListContract.Presen
         view?.showLoading()
     }
 
-    override fun searchJobs(query: String) {
+    override fun searchJobs(query: String, location: String, fullTime: Boolean) {
         disposable.clear()
         getJobs.description = query
+        getJobs.location = location
+        getJobs.fullTime = fullTime
         loadData()
     }
 

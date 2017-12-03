@@ -29,7 +29,10 @@ class JobRepositoryImpl : JobRepository {
                          long: Double?,
                          fullTime: Boolean?,
                          saved: Boolean?): Flowable<DataResult<List<Job>>> =
-            dataSourceFactory.jobs(description = description, saved = saved)
+            dataSourceFactory.jobs(description = description,
+                    location = location,
+                    fullTime = fullTime,
+                    saved = saved)
 
     override fun getMoreJobs(page: Int){
         dataSourceFactory.getMoreJobs(page)

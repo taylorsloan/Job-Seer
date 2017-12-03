@@ -55,9 +55,15 @@ class BrowseJobListPresenter(var view: JobListContract.View?) : JobListContract.
         view?.showLoading()
     }
 
-    override fun searchJobs(query: String) {
+    override fun searchJobs(query: String, location: String, fullTime: Boolean) {
+        Timber.d("Query: %s, Location: %s, Fulltime: %s", query, location, fullTime)
         disposable.clear()
-        getJobs.description = query
+        getJobs.apply {
+            page = 0
+            description = query
+            this.location = location
+            this.fullTime = fullTime
+        }
         loadData()
     }
 

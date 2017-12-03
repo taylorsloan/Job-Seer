@@ -21,6 +21,14 @@ class LocalDataSource(dataModule: DataModule) : DataSource {
         dataModule.storageComponent().inject(this)
     }
 
+    private fun formatQuery(query: String?) : String {
+        return if (query == null) {
+            "%%"
+        } else {
+            "%$query%"
+        }
+    }
+
     override fun jobs(description: String?,
                       location: String?,
                       lat: Double?,
@@ -28,35 +36,20 @@ class LocalDataSource(dataModule: DataModule) : DataSource {
                       fullTime: Boolean?,
                       page: Int,
                       saved: Boolean?): Flowable<DataResult<List<Job>>> {
-        return jobDao.loadJobs()
+        val params = Triple(formatQuery(description),
+                formatQuery(location),
+                fullTime)
+        return Flowable.just(params)
+                .flatMap {
+                    jobDao.loadJobs(description = params.first,
+                            location = params.second)
+                }
                 .subscribeOn(Schedulers.io())
                 .map {
                     val convertedJobs = JobMapper.mapLocalListToDomain(it)
                     DataResult(data = convertedJobs)
                 }
-        /*val queryBuilder = jobBox.query()
-        addSearchQuery(queryBuilder, description)
-        addSavedQuery(queryBuilder, saved)
-        return RxQuery.observable(queryBuilder.build())
-                .mapToNet { JobMapper.mapLocalListToDomain(it) }
-                .mapToNet { DataResult(data = it) }*/
     }
-
-    /*private fun addSearchQuery(queryBuilder: QueryBuilder<LocalJob>, search: String?) :
-            QueryBuilder<LocalJob> {
-        search?.let {
-            queryBuilder.contains(LocalJob_.description, it)
-        }
-        return queryBuilder
-    }
-
-    private fun addSavedQuery(queryBuilder: QueryBuilder<LocalJob>, saved: Boolean?) :
-            QueryBuilder<LocalJob> {
-        saved?.let {
-            queryBuilder.equal(LocalJob_.saved, saved)
-        }
-        return queryBuilder
-    }*/
 
     override fun job(id: String): Flowable<DataResult<Job>> {
         return jobDao.loadJob(id)
@@ -65,7 +58,7 @@ class LocalDataSource(dataModule: DataModule) : DataSource {
     }
 
     override fun savedJobs(): Flowable<DataResult<List<Job>>> {
-        return jobDao.loadJobs(1)
+        return jobDao.loadJobs(saved = 1)
                 .subscribeOn(Schedulers.io())
                 .map {
                     val convertedList = JobMapper.mapLocalListToDomain(it)

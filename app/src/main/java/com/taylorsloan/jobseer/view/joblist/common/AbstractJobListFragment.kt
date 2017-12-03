@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.taylorsloan.jobseer.R
 import com.taylorsloan.jobseer.domain.job.models.Job
 import com.taylorsloan.jobseer.view.jobdetail.JobDetailActivity
@@ -115,9 +114,10 @@ abstract class AbstractJobListFragment : Fragment(), JobListContract.View, ViewE
         swipeRefreshLayout.isRefreshing = false
     }
 
-    override fun searchJobs(query: String) {
-        Toast.makeText(context, "Queried: $query", Toast.LENGTH_SHORT).show()
-        presenter.searchJobs(query)
+    override fun searchJobs(query: String, location: String, fullTime: Boolean) {
+        if (::presenter.isInitialized) {
+            presenter.searchJobs(query, location, fullTime)
+        }
     }
 
     override fun showJobDetail(job: Job) {

@@ -14,13 +14,13 @@ interface JobListContract {
         fun hideLoading()
         fun hideRefreshing()
         fun showJobDetail(job: Job)
-        fun searchJobs(query: String)
+        fun searchJobs(query: String, location: String, fullTime: Boolean)
     }
 
     interface Presenter : BasePresenter{
         fun loadMore(page: Int)
         fun refresh()
         fun openJobDetail(job: Job)
-        fun searchJobs(query: String)
+        fun searchJobs(query: String, location: String, fullTime: Boolean)
     }
 }
