@@ -41,7 +41,7 @@ class CloudDataSource(dataModule: DataModule) : DataSource {
                 .toFlowable()
     }
 
-    override fun savedJobs(): Flowable<DataResult<List<Job>>> {
+    override fun savedJobs(description: String?, location: String?, fullTime: Boolean?): Flowable<DataResult<List<Job>>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

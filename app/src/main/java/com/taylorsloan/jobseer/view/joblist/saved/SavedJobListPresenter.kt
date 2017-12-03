@@ -56,9 +56,9 @@ class SavedJobListPresenter(var view: JobListContract.View?) : JobListContract.P
 
     override fun searchJobs(query: String, location: String, fullTime: Boolean) {
         disposable.clear()
-//        savedJobs.description = query
-//        savedJobs.location = location
-//        savedJobs.fullTime = fullTime
+        savedJobs.description = query
+        savedJobs.location = location
+        savedJobs.fullTime = fullTime
         loadData()
     }
 

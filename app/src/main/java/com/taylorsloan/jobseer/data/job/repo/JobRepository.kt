@@ -16,7 +16,9 @@ interface JobRepository {
                 fullTime: Boolean? = null,
                 saved: Boolean? = null): Flowable<DataResult<List<Job>>>
 
-    fun getSavedJobs() : Flowable<DataResult<List<Job>>>
+    fun getSavedJobs(description: String? = null,
+                     location: String? = null,
+                     fullTime: Boolean? = null) : Flowable<DataResult<List<Job>>>
 
     fun getMoreJobs(page: Int = 0)
 

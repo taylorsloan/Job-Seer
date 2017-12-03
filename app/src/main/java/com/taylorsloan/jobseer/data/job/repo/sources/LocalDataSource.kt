@@ -57,8 +57,16 @@ class LocalDataSource(dataModule: DataModule) : DataSource {
                 .map { DataResult(data = JobMapper.mapToDomain(it)) }
     }
 
-    override fun savedJobs(): Flowable<DataResult<List<Job>>> {
-        return jobDao.loadJobs(saved = 1)
+    override fun savedJobs(description: String?,
+                           location: String?,
+                           fullTime: Boolean?): Flowable<DataResult<List<Job>>> {
+        val params = Triple(formatQuery(description),
+                formatQuery(location),
+                fullTime)
+        return Flowable.just(params)
+                .flatMap { jobDao.loadJobs(saved = 1,
+                        description = params.first,
+                        location = params.second) }
                 .subscribeOn(Schedulers.io())
                 .map {
                     val convertedList = JobMapper.mapLocalListToDomain(it)

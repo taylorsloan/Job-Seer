@@ -11,7 +11,9 @@ import javax.inject.Inject
 /**
  * Created by taylo on 11/27/2017.
  */
-class GetSavedJobs : BaseUseCase<Flowable<DataResult<List<Job>>>> {
+class GetSavedJobs(var description: String? = null,
+                   var location: String? = null,
+                   var fullTime: Boolean? = null) : BaseUseCase<Flowable<DataResult<List<Job>>>> {
 
     @Inject
     lateinit var jobRepo : JobRepository
@@ -21,6 +23,6 @@ class GetSavedJobs : BaseUseCase<Flowable<DataResult<List<Job>>>> {
     }
 
     override fun execute(): Flowable<DataResult<List<Job>>> {
-        return jobRepo.getSavedJobs()
+        return jobRepo.getSavedJobs(description, location, fullTime)
     }
 }

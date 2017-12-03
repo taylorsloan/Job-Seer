@@ -44,8 +44,8 @@ class JobRepositoryImpl : JobRepository {
         jobDao.saveJob(1, id)
     }
 
-    override fun getSavedJobs(): Flowable<DataResult<List<Job>>> {
-        return dataSourceFactory.savedJobs()
+    override fun getSavedJobs(description: String?, location: String?, fullTime: Boolean?): Flowable<DataResult<List<Job>>> {
+        return dataSourceFactory.savedJobs(description, location, fullTime)
     }
 
     override fun unsaveJob(id: String) {

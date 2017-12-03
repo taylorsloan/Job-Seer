@@ -1,5 +1,6 @@
 package com.taylorsloan.jobseer.data.job.repo.sources
 
+import com.jakewharton.rxrelay2.BehaviorRelay
 import com.taylorsloan.jobseer.data.DataModule
 import com.taylorsloan.jobseer.data.DataModuleImpl
 import com.taylorsloan.jobseer.data.common.AppDatabase
@@ -9,7 +10,6 @@ import com.taylorsloan.jobseer.domain.job.models.Job
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.Disposable
-import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -27,7 +27,7 @@ class DataSourceFactory(dataModule: DataModule) : DataSource {
 
     private var localJobsDisposable : Disposable? = null
 
-    private val subject: BehaviorSubject<DataResult<List<Job>>> = BehaviorSubject.create()
+    private val subject: BehaviorRelay<DataResult<List<Job>>> = BehaviorRelay.create()
 
     private var previousSearchParams : SearchParams? = null
 
@@ -52,12 +52,9 @@ class DataSourceFactory(dataModule: DataModule) : DataSource {
         val searchParams = SearchParams(description, location, lat, long, fullTime, saved)
         if (previousSearchParams?.hashCode() != searchParams.hashCode()){
             localJobsDisposable?.dispose()
-            localJobsDisposable = localDataStore.jobs(description, location, lat, long, fullTime, page, saved)
-                    .subscribe(
-                            { subject.onNext(it) },
-                            { subject.onError(it) },
-                            { subject.onComplete() }
-                    )
+            localJobsDisposable = localDataStore
+                    .jobs(description, location, lat, long, fullTime, page, saved)
+                    .subscribe(subject)
         }
         previousSearchParams = searchParams
         return subject.toFlowable(BackpressureStrategy.BUFFER)
@@ -76,7 +73,7 @@ class DataSourceFactory(dataModule: DataModule) : DataSource {
                                 Timber.d("Received Jobs: %s", it.data?.size.toString())                      },
                             {
                                 Timber.e(it)
-                                subject.onNext(DataResult(error = it))
+                                subject.accept(DataResult(error = it))
                             }
                     )
         }
@@ -92,14 +89,15 @@ class DataSourceFactory(dataModule: DataModule) : DataSource {
                         },
                         {
                             Timber.e(it)
-                            subject.onNext(DataResult(error = it))
                         }
                 )
         return localDataStore.job(id)
     }
 
-    override fun savedJobs(): Flowable<DataResult<List<Job>>> {
-        return localDataStore.savedJobs()
+    override fun savedJobs(description: String?,
+                           location: String?,
+                           fullTime: Boolean?): Flowable<DataResult<List<Job>>> {
+        return localDataStore.savedJobs(description, location, fullTime)
     }
 
     override fun clearJobs() {

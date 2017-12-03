@@ -23,6 +23,8 @@ import kotlinx.android.synthetic.main.activity_job_list_container.*
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
+
+
 class JobListContainerActivity : AppCompatActivity() {
 
     companion object {
@@ -49,9 +51,9 @@ class JobListContainerActivity : AppCompatActivity() {
 
     private fun setupViews() {
         tabLayout.setupWithViewPager(viewPager)
-        initBrowseJobsFragment()
-        initSavedJobFragment()
-        adapter = MyAdapter(supportFragmentManager, items)
+//        initBrowseJobsFragment()
+//        initSavedJobFragment()
+        adapter = MyAdapter(supportFragmentManager)
         viewPager.adapter = adapter
     }
 
@@ -80,9 +82,13 @@ class JobListContainerActivity : AppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     Timber.d("Query: %s, Location: %s, Fulltime: %s", it.first, it.second, it.third)
-                    jobListView?.searchJobs(it.first.toString(),
-                            it.second.toString(),
-                            it.third)
+                    (0..adapter.count)
+                            .map { supportFragmentManager.findFragmentByTag("android:switcher:${R.id.viewPager}:$it") as? JobListContract.View }
+                            .forEach { page ->
+                                page?.searchJobs(it.first.toString(),
+                                        it.second.toString(),
+                                        it.third)
+                            }
                 }))
     }
 
@@ -112,19 +118,27 @@ class JobListContainerActivity : AppCompatActivity() {
         items.add(Pair("Saved", fragment))
     }
 
-    class MyAdapter(fm: FragmentManager, private val item: ArrayList<Pair<String, Fragment>>) :
+    class MyAdapter(fm: FragmentManager) :
             FragmentPagerAdapter(fm) {
 
         override fun getItem(position: Int): Fragment {
-            return item[position].second
+            return when(position) {
+                0 -> BrowseJobListFragment.newInstance()
+                1 -> SavedJobListFragment.newInstance()
+                else -> throw RuntimeException("Fragment does not exist at this position")
+            }
         }
 
         override fun getCount(): Int {
-            return item.size
+            return 2
         }
 
         override fun getPageTitle(position: Int): CharSequence? {
-            return item[position].first
+            return when(position) {
+                0 -> "Browse"
+                1 -> "Saved"
+                else -> throw RuntimeException("Fragment does not exist at this position")
+            }
         }
     }
 }
