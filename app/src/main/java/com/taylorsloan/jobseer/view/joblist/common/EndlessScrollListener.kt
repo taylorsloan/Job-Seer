@@ -96,10 +96,14 @@ abstract class EndlessRecyclerViewScrollListener : RecyclerView.OnScrollListener
         // If we do need to reload some more data, we execute onLoadMore to fetch the data.
         // threshold should reflect how many total columns there are too
         if (!loading && lastVisibleItemPosition + visibleThreshold > totalItemCount) {
-            currentPage = totalItemCount / 50
+            currentPage = computePage(totalItemCount)
             onLoadMore((currentPage), totalItemCount, view!!)
             loading = true
         }
+    }
+
+    private fun computePage(totalItemsCount: Int) : Int{
+        return Math.ceil(totalItemsCount / 50.0).toInt()
     }
 
     // Call this method whenever performing new searches

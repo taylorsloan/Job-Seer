@@ -33,6 +33,7 @@
         <activity
             android:name=".view.joblist.JobListContainerActivity"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

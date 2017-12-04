@@ -30,11 +30,13 @@ class BrowseJobListPresenter(var view: JobListContract.View?) : JobListContract.
                     it.error?.let {
 
                     }
+                    if (!it.loading) {
+                        view?.hideLoading()
+                        view?.hideRefreshing()
+                    }
                 }
                 .subscribe(
                         {
-                            view?.hideLoading()
-                            view?.hideRefreshing()
                             view?.showJobs(it.data!!)
                         },
                         {
