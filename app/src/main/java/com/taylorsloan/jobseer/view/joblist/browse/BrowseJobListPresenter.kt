@@ -37,7 +37,7 @@ class BrowseJobListPresenter(var view: JobListContract.View?) : JobListContract.
                 }
                 .subscribe(
                         {
-                            view?.showJobs(it.data!!)
+                            it.data?.let { view?.showJobs(it) }
                         },
                         {
                             Timber.e(it, "Error Getting Jobs")

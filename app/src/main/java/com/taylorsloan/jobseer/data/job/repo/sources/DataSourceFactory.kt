@@ -70,7 +70,9 @@ class DataSourceFactory(dataModule: DataModule) : DataSource {
                     }
                     .subscribe(
                             {
-                                Timber.d("Received Jobs: %s", it.data?.size.toString())                      },
+                                Timber.d("Received Jobs: %s", it.data?.size.toString())
+                                subject.accept(DataResult(loading = false))
+                            },
                             {
                                 Timber.e(it)
                                 subject.accept(DataResult(error = it))

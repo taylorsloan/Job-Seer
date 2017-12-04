@@ -97,9 +97,18 @@ abstract class AbstractJobListFragment : Fragment(), JobListContract.View, ViewE
                                 listState = null
                             }
                             Timber.d("LocalJob Count: %s", items.size)
+                            showEmpty(items.size == 0)
                         },
                         {}
                 )
+    }
+
+    private fun showEmpty(show : Boolean) {
+        if (show) {
+            frameLayout_empty.visibility = View.VISIBLE
+        } else {
+            frameLayout_empty.visibility = View.GONE
+        }
     }
 
     override fun showLoading() {

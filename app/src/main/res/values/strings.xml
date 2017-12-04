@@ -14,4 +14,5 @@
     <string name="search_hint">Search</string>
     <string name="hint_location">Location</string>
     <string name="checkbox_text">Full Time</string>
+    <string name="empty_list">There\'s nothing here</string>
 </resources>
