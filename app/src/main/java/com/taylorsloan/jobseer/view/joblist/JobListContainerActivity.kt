@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.widget.RxCompoundButton
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.taylorsloan.jobseer.R
@@ -27,18 +26,8 @@ import java.util.concurrent.TimeUnit
 
 class JobListContainerActivity : AppCompatActivity() {
 
-    companion object {
-        private const val FRAGMENT_TAG_GITHUB_JOB = "github"
-        private const val FRAGMENT_TAG_SAVED = "saved"
-    }
-
-    private var jobListView : JobListContract.View? = null
-
-    private val items = ArrayList<Pair<String, Fragment>>(2)
     private lateinit var adapter : MyAdapter
     private val disposables = CompositeDisposable()
-
-    private var filterExpanded = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,25 +40,25 @@ class JobListContainerActivity : AppCompatActivity() {
 
     private fun setupViews() {
         tabLayout.setupWithViewPager(viewPager)
-//        initBrowseJobsFragment()
-//        initSavedJobFragment()
         adapter = MyAdapter(supportFragmentManager)
         viewPager.adapter = adapter
     }
 
+    private fun clearFilters() {
+        editText_location.setText("")
+    }
+
     private fun setupInteractions() {
-        disposables.add(RxView.clicks(imageButton_filter)
+        disposables.add(RxCompoundButton.checkedChanges(toggleButton_filter)
                 .subscribe {
-                    constraintLayout_filter.apply {
-                        filterExpanded = if (filterExpanded){
-                            collapse()
-                            false
-                        } else {
-                            expand()
-                            true
-                        }
+                    if (it) {
+                        constraintLayout_filter.expand()
+                    } else {
+                        constraintLayout_filter.collapse()
+                        clearFilters()
                     }
                 })
+
         disposables.add(Observable.combineLatest(RxTextView.textChanges(editText_search),
                 RxTextView.textChanges(editText_location),
                 RxCompoundButton.checkedChanges(checkBox_fullTime),
@@ -82,14 +71,18 @@ class JobListContainerActivity : AppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     Timber.d("Query: %s, Location: %s, Fulltime: %s", it.first, it.second, it.third)
-                    (0..adapter.count)
-                            .map { supportFragmentManager.findFragmentByTag("android:switcher:${R.id.viewPager}:$it") as? JobListContract.View }
-                            .forEach { page ->
-                                page?.searchJobs(it.first.toString(),
-                                        it.second.toString(),
-                                        it.third)
-                            }
+                    propagateSearchParams(it.first.toString(), it.second.toString(), it.third)
                 }))
+    }
+
+    private fun propagateSearchParams(description: String, location: String, fullTime: Boolean) {
+        (0..adapter.count)
+                .map { supportFragmentManager.findFragmentByTag("android:switcher:${R.id.viewPager}:$it") as? JobListContract.View }
+                .forEach { page ->
+                    page?.searchJobs(description,
+                            location,
+                            fullTime)
+                }
     }
 
     private fun tearDownInteractions() {
@@ -99,23 +92,6 @@ class JobListContainerActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         tearDownInteractions()
-    }
-
-    private fun initBrowseJobsFragment() {
-        var fragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG_GITHUB_JOB)
-        if (fragment == null) {
-            fragment = BrowseJobListFragment.newInstance()
-        }
-        jobListView = fragment as? JobListContract.View
-        items.add(Pair("Browse", fragment))
-    }
-
-    private fun initSavedJobFragment() {
-        var fragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG_SAVED)
-        if (fragment == null) {
-            fragment = SavedJobListFragment.newInstance()
-        }
-        items.add(Pair("Saved", fragment))
     }
 
     class MyAdapter(fm: FragmentManager) :

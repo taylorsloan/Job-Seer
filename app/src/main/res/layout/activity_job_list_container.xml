@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.taylorsloan.jobseer.view.joblist.J0bListContainerActivity">
+    tools:context="com.taylorsloan.jobseer.view.joblist.JobListContainerActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout_title"
@@ -42,13 +42,14 @@
                 android:elevation="2dp"
                 android:orientation="horizontal">
 
-                <ImageButton
-                    android:id="@+id/imageButton_filter"
+                <ToggleButton
+                    android:id="@+id/toggleButton_filter"
                     android:layout_width="48dp"
                     android:layout_height="match_parent"
-                    android:background="@android:color/transparent"
-                    android:tint="@color/darkerer_gray"
-                    app:srcCompat="@drawable/ic_filter_list" />
+                    android:background="@drawable/filter_state_background"
+                    android:checked="false"
+                    android:textOff=""
+                    android:textOn="" />
 
                 <EditText
                     android:id="@+id/editText_search"
